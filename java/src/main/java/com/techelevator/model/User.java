@@ -81,4 +81,19 @@ public class User {
               ", authorities=" + authorities +
               '}';
    }
+   public boolean isActivated() {
+      return activated;
+   }
+   public String getPassword() {
+      return password;
+   }
+   public String getUsername() {
+      return username;
+   }
+   public Set<Authority> getAuthorities() {
+      return authorities;
+   }
+   public int getId() {
+      return id;
+   }
 }
