@@ -17,7 +17,8 @@
         <label for="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" v-model="user.confirmPassword" required />
       </div>
-      <button type="submit">Create Account</button>
+      <button type="submit" @click="makeUserRoleDJ">Create DJ Account</button>
+      <button type="submit" @click="makeUserRoleUser">Create Regular Account</button>
       <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     </form>
   </div>
@@ -41,6 +42,12 @@ export default {
     };
   },
   methods: {
+    makeUserRoleDJ() {
+      this.user.role = 'DJ';
+    },
+    makeUserRoleUser() {
+      this.user.role = 'user';
+    },
     register() {
       if (this.user.password != this.user.confirmPassword) {
         this.registrationErrors = true;

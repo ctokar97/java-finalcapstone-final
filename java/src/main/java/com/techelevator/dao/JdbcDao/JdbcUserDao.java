@@ -89,6 +89,16 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
+    private User changeUserRole(User user, String newRole) {
+        String sql = "UPDATE users SET role = ? WHERE user_id = ?";
+        try {
+            jdbcTemplate.update(sql, newRole, user.getId());
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return getUserByUsername(user.getUsername());
+    }
+
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getInt("user_id"));
