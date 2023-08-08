@@ -1,18 +1,12 @@
 package com.techelevator.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.techelevator.security.Authority;
 
-import javax.persistence.Entity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
-@Entity
 public class User {
 
    private int id;

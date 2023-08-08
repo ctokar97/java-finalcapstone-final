@@ -1,11 +1,12 @@
-package com.techelevator.dao;
+package com.techelevator.dao.JdbcDao;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.techelevator.dao.DaoInterface.UserDao;
 import com.techelevator.exception.DaoException;
-import com.techelevator.model.RegisterUserDto;
+import com.techelevator.security.RegisterUserDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
