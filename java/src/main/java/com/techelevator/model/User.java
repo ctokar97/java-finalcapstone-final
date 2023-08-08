@@ -1,6 +1,7 @@
 package com.techelevator.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.techelevator.security.Authority;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -26,40 +27,20 @@ public class User {
       this.activated = true;
    }
 
-   public int getId() {
-      return id;
-   }
-
    public void setId(int id) {
       this.id = id;
-   }
-
-   public String getUsername() {
-      return username;
    }
 
    public void setUsername(String username) {
       this.username = username;
    }
 
-   public String getPassword() {
-      return password;
-   }
-
    public void setPassword(String password) {
       this.password = password;
    }
 
-   public boolean isActivated() {
-      return activated;
-   }
-
    public void setActivated(boolean activated) {
       this.activated = activated;
-   }
-
-   public Set<Authority> getAuthorities() {
-      return authorities;
    }
 
    public void setAuthorities(Set<Authority> authorities) {
@@ -99,5 +80,20 @@ public class User {
               ", activated=" + activated +
               ", authorities=" + authorities +
               '}';
+   }
+   public boolean isActivated() {
+      return activated;
+   }
+   public String getPassword() {
+      return password;
+   }
+   public String getUsername() {
+      return username;
+   }
+   public Set<Authority> getAuthorities() {
+      return authorities;
+   }
+   public int getId() {
+      return id;
    }
 }
