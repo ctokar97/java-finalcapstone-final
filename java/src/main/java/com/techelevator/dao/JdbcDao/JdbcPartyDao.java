@@ -17,10 +17,13 @@ public class JdbcPartyDao implements PartyDao {
 	private final JdbcTemplate jdbcTemplate;
 	private final PartyMapper partyMapper;
 
+
 	public JdbcPartyDao(JdbcTemplate jdbcTemplate, PartyMapper partyMapper) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.partyMapper = partyMapper;
 	}
+
+
 
 	/**
 	 * Retrieves all parties from the database.
@@ -32,7 +35,7 @@ public class JdbcPartyDao implements PartyDao {
 	public List<Party> getAllParties() {
 		List<Party> parties = new ArrayList<>();
 		Party party = new Party();
-		String sql = "SELECT * FROM party";
+		String sql = "SELECT party_id, party_name FROM party";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -55,7 +58,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyByName(String partyName) {
 		Party party = new Party();
-		String sql = "SELECT * FROM party WHERE party_name = ?";
+		String sql = "SELECT party_id, party_name FROM party WHERE party_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyName);
 			if (results.next()) {

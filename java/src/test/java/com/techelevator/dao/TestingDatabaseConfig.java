@@ -58,7 +58,7 @@ public class TestingDatabaseConfig {
         dataSource.setPassword(DB_PASSWORD);
         dataSource.setAutoCommit(false); //So we can rollback after each test.
 
-        ScriptUtils.executeSqlScript(dataSource.getConnection(), new FileSystemResource("database/schema.sql"));
+        ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("schema.sql"));
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("test-data.sql"));
 
         ds = dataSource;
