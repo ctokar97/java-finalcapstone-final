@@ -1,7 +1,7 @@
 <template>
   <div id="login">
-    <form @submit.prevent="login">
-      <h1 >Please Sign In</h1>
+    <form class="login-form" @submit.prevent="login">
+      <h1>Please Sign In</h1>
       <div role="alert" v-if="invalidCredentials">
         Invalid username and password!
       </div>
@@ -61,11 +61,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .form-input-group {
   margin-bottom: 1rem;
 }
 label {
   margin-right: 0.5rem;
 }
+
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  width: 30%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
+}
+
+h1 {
+  justify-content: flex-start;
+}
+
+body {
+
+}
+
+
 </style>

@@ -55,6 +55,12 @@ public class User {
       }
    }
 
+   public void setAuthority(String role) {
+      String authority = role.contains("ROLE_") ? role : "ROLE_" + role;
+      this.authorities.clear();
+      this.authorities.add(new Authority(authority));
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;

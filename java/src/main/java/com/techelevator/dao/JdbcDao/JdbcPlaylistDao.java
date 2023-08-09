@@ -7,10 +7,13 @@ import com.techelevator.services.MappingServices.PlaylistMapper;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcPlaylistDao implements PlaylistDao {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -111,6 +114,6 @@ public class JdbcPlaylistDao implements PlaylistDao {
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
-		return newPlaylist;
+		return getPlaylistByName(newPlaylist.getPlaylist_name());
 	}
 }
