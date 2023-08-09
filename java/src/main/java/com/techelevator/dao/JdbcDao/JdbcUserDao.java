@@ -3,10 +3,14 @@ package com.techelevator.dao.JdbcDao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.techelevator.dao.DaoInterface.UserDao;
 import com.techelevator.exception.DaoException;
+import com.techelevator.security.Authority;
 import com.techelevator.security.RegisterUserDto;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -89,14 +93,27 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
-    private User changeUserRole(User user, String newRole) {
+    @Override
+    public User changeUserRole(Integer userId, String newRole) {
+        User user = getUserById(userId);
+        if(user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " does not exist.");
+        }
+
+        user.getAuthorities().add(new Authority("ROLE_" + newRole));
+
+        String roleString = user.getAuthorities().stream()
+                .map(Authority::getName)
+                .collect(Collectors.joining(","));
+
         String sql = "UPDATE users SET role = ? WHERE user_id = ?";
         try {
-            jdbcTemplate.update(sql, newRole, user.getId());
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
+            jdbcTemplate.update(sql, roleString, userId);
+        } catch(DataAccessException e) {
+            throw new RuntimeException("Error changing user role in database.", e);
         }
-        return getUserByUsername(user.getUsername());
+
+        return getUserById(userId);
     }
 
     private User mapRowToUser(SqlRowSet rs) {

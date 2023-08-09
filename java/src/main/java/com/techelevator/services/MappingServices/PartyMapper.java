@@ -2,7 +2,9 @@ package com.techelevator.services.MappingServices;
 
 import com.techelevator.model.Party;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PartyMapper {
 
 	/**

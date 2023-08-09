@@ -7,11 +7,13 @@ import com.techelevator.services.MappingServices.PartyMapper;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Component
 public class JdbcPartyDao implements PartyDao {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -32,7 +34,7 @@ public class JdbcPartyDao implements PartyDao {
 	public List<Party> getAllParties() {
 		List<Party> parties = new ArrayList<>();
 		Party party = new Party();
-		String sql = "SELECT * FROM party";
+		String sql = "SELECT party_id, party_name FROM party";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -55,7 +57,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyByName(String partyName) {
 		Party party = new Party();
-		String sql = "SELECT * FROM party WHERE party_name = ?";
+		String sql = "SELECT party_id, party_name FROM party WHERE party_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyName);
 			if (results.next()) {
