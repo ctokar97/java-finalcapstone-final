@@ -3,10 +3,13 @@ package com.techelevator.dao;
 import com.techelevator.dao.JdbcDao.JdbcPartyDao;
 import com.techelevator.model.Party;
 import com.techelevator.services.MappingServices.PartyMapper;
+import com.techelevator.services.MappingServices.PlaylistMapper;
+import com.techelevator.services.MappingServices.UserMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.parameters.P;
 
 
 import java.time.LocalDate;
@@ -24,8 +27,10 @@ public class JdbcPartyDaoTests extends BaseDaoTests {
     @Before
     public  void setup() {
         PartyMapper partyMapper = new PartyMapper();
+        UserMapper userMapper = new UserMapper();
+        PlaylistMapper playlistMapper = new PlaylistMapper();
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        sut = new JdbcPartyDao(jdbcTemplate, partyMapper);
+        sut = new JdbcPartyDao(jdbcTemplate, partyMapper, userMapper, playlistMapper);
     }
 
     @Test
