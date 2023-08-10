@@ -4,13 +4,6 @@ INSERT INTO users (username,password_hash,role) VALUES ('user1','user1','ROLE_US
 INSERT INTO users (username,password_hash,role) VALUES ('user2','user2','ROLE_USER');
 INSERT INTO users (username,password_hash,role) VALUES ('user3','user3','ROLE_USER');
 
---INSERT INTO users (username, password_hash, role) VALUES
---                                                      ('user1', 'password123', 'admin'),
---                                                      ('user2', 'password234', 'user'),
---                                                      ('user3', 'password345', 'user'),
---                                                      ('user4', 'password456', 'admin'),
---                                                      ('user5', 'password567', 'user');
-
 INSERT INTO party (party_name) VALUES
                                    ('party1'),
                                    ('party2'),

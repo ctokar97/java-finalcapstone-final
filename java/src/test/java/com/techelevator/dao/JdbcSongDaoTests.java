@@ -55,7 +55,7 @@ public class JdbcSongDaoTests extends BaseDaoTests {
     }
 
 
-    @Test
+   @Test
     public void create_song_returns_party_with_id_and_expected_values() {
         Song newSong = new Song(6, "song6", "artist6", "genre6", "user_genre6");
 
@@ -71,16 +71,16 @@ public class JdbcSongDaoTests extends BaseDaoTests {
         assertSongMatch(newSong, createdSong);
     }
 
-    /* @Test
-     public void updated_genre_has_expected_values_when_retrieved() {
-         Song genreToUpdate = sut.getSongByName("party2");
+    @Test
+    public void updated_genre_has_expected_values_when_retrieved() {
+        Song genreToUpdate = sut.getSongByName("song2");
 
-         genreToUpdate.setGenre("Jam");
+        genreToUpdate.setUser_genre("Jam");
 
-         Song updatedSong = sut.updateGenre(genreToUpdate);
+        Song updatedGenre = sut.updateGenre(genreToUpdate);
 
-         assertSongMatch(genreToUpdate, updatedSong);
-     }*/
+        assertSongMatch(genreToUpdate, updatedGenre);
+    }
     private void assertSongMatch(Song expected, Song actual) {
         Assert.assertEquals(expected.getSong_id(), actual.getSong_id());
         Assert.assertEquals(expected.getSong_name(), actual.getSong_name());
