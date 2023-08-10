@@ -9,8 +9,14 @@
 </template>
 
 <style>
+html {
+  height: 100%;
+  margin: 0;
+}
+
 body {
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
   width: 100vw;
   overflow-x: hidden;
   color: #fff;

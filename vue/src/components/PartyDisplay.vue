@@ -10,6 +10,12 @@ export default {
     <div class="name-container">
       <h1>{{ party.party_name }}</h1>
     </div>
+    <div class="user-container">
+      <p>People playing:</p>
+      <div class="scrolling-users">
+        <p class ="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +25,19 @@ export default {
   justify-content: center;
   align-items: center;
   border: 1px solid red;
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+}
+
+.user-container {
+  margin-top: 1em;
+}
+
+.scrolling-users {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.username {
+  margin: 0.5em;
 }
 </style>
