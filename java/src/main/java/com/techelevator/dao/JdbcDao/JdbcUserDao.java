@@ -93,6 +93,16 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
+    /**
+     * Changes the role of a user identified by their user ID.
+     * If the user with the specified ID does not exist, an IllegalArgumentException is thrown.
+     *
+     * @param userId   the ID of the user to change the role for
+     * @param newRole  the new role to assign to the user (e.g., "ADMIN", "USER")
+     * @return the updated user with the new role
+     * @throws IllegalArgumentException if the user with the specified ID does not exist
+     * @throws RuntimeException if there is an error changing the user role in the database
+     */
     @Override
     public User changeUserRole(Integer userId, String newRole) {
         User user = getUserById(userId);

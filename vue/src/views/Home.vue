@@ -21,14 +21,10 @@ export default {
 </script>
 
 <style scoped>
-* {
-  border: 1px solid red;
-}
 
 .home {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 100vw;
 }
 
