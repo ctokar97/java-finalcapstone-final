@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.techelevator.dao.JdbcDao.JdbcPlaylistDao;
 import com.techelevator.model.Playlist;
 import com.techelevator.services.MappingServices.PlaylistMapper;
+import com.techelevator.services.MappingServices.SongMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +23,9 @@ public class JdbcPlaylistDaoTests extends BaseDaoTests {
         @Before
         public  void setup() {
             PlaylistMapper playlistMapper = new PlaylistMapper();
+                SongMapper songMapper = new SongMapper();
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-            sut = new JdbcPlaylistDao(jdbcTemplate, playlistMapper);
+            sut = new JdbcPlaylistDao(jdbcTemplate, playlistMapper, songMapper);
         }
 
         @Test
