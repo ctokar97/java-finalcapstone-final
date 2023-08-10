@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DaoInterface.PlaylistDao;
 import com.techelevator.model.Playlist;
+import com.techelevator.model.Song;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,24 @@ public class PlaylistController {
 		try {
 			playlist = playlistDao.getPlaylistByName(playlistName);
 			return ResponseEntity.ok(playlist);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(null);
+		}
+	}
+
+	/**
+	 * Retrieves the list of songs in a playlist identified by the given playlist ID.
+	 *
+	 * @param playlistId the ID of the playlist
+	 * @return ResponseEntity<List < Song>> a ResponseEntity containing a list of Song objects if successful,
+	 *         or a ResponseEntity with a bad request if an exception occurs
+	 */
+	@GetMapping("/{playlistId}/songs")
+	public ResponseEntity<List<Song>> getSongsInPlaylist(@PathVariable Integer playlistId) {
+		List<Song> songs;
+		try {
+			songs = playlistDao.getSongsInPlaylist(playlistId);
+			return ResponseEntity.ok(songs);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(null);
 		}

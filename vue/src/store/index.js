@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import partyService from "@/services/PartyService";
+import playlistService from "@/services/PlaylistService";
 
 Vue.use(Vuex)
 
@@ -19,7 +21,8 @@ if(currentToken != null) {
 export default new Vuex.Store({
   state: {
     token: currentToken || '',
-    user: currentUser || {}
+    user: currentUser || {},
+    parties: {}
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -37,6 +40,40 @@ export default new Vuex.Store({
       state.token = '';
       state.user = {};
       axios.defaults.headers.common = {};
+    },
+    SET_PARTIES(state, parties) {
+        state.parties = parties;
+    }
+  },
+  actions: {
+    async fetchParty({commit}) {
+      let response = await partyService.getAll();
+      const parties = response.data;
+
+      await Promise.all(parties.map(async (party) => {
+        let response = await partyService.getUsersInParty(party.id);
+        party.users = response.data;
+      }));
+
+      await Promise.all(parties.map(async (party) => {
+        let response = await partyService.getPlaylistInParty(party.id);
+        const playlist = response.data;
+
+        if (playlist && playlist.playlist_id) {
+          party.playlist = playlist;
+          response = await playlistService.getSongsInPlaylist(playlist.playlist_id);
+          party.playlist.songs = response.data;
+        } else {
+          party.playlist = { songs: [] };
+        }
+      }));
+
+      commit('SET_PARTIES', parties);
+    }
+  },
+  getters: {
+    getParties: state => {
+        return state.parties;
     }
   }
 })
