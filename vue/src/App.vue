@@ -10,14 +10,25 @@
 
 <style>
 body {
-
   height: 100vh;
   width: 100vw;
   overflow-x: hidden;
   color: #fff;
-  background: linear-gradient(45deg, #52a6f1, #f3905a, #f3db59, #fbf2b7, #77ec86);
+  background: linear-gradient(45deg, pink, blue, orange, green, lightgreen);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 body::before {
@@ -34,7 +45,8 @@ body::before {
   move 5s linear infinite;
   display: block;
   z-index: -1;
-  -webkit-animation: sliderShape 5s linear infinite, move 30s linear infinite;
+  -webkit-animation: sliderShape 5s linear infinite, move 40s linear infinite;
+  filter: blur(5px);
 }
 
 @keyframes sliderShape{
@@ -61,18 +73,9 @@ body::before {
   50% { top: 50%; left: 70%;}
   75% { top: 10%; left: 90%;}
   100% { top: 80%; left: 10%;}
+  75% { top: 10%; left: 90%;}
+  50% { top: 50%; left: 70%;}
+  25% { top: 70%; left: 30%;}
+  0% { top: 10%; left: 10%;}
 }
-
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 </style>
