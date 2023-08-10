@@ -2,6 +2,8 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DaoInterface.PartyDao;
 import com.techelevator.model.Party;
+import com.techelevator.model.Playlist;
+import com.techelevator.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +51,41 @@ public class PartyController {
 				return ResponseEntity.notFound().build();
 			}
 			return ResponseEntity.ok(party);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	/**
+	 * Retrieves the users in a party
+	 *
+	 * @param partyId the ID of the party to retrieve the users from
+	 * @return a ResponseEntity with the retrieved users in the party,
+	 *         or ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) if an exception occurs
+	 */
+	@GetMapping("/{partyId}/users")
+	public ResponseEntity<String> getUsersInParty(@PathVariable Integer partyId) {
+		try {
+			List<User> users = partyDao.getUsersInParty(partyId);
+			return ResponseEntity.ok(users.toString());
+		} catch (Exception e) {
+			String errorMessage = "An error occurred while trying to fetch users in party: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+		}
+	}
+
+	/**
+	 * Retrieves the playlist for a given party.
+	 *
+	 * @param partyId the ID of the party
+	 * @return the playlist for the party
+	 * @throws Exception if an error occurs while retrieving the playlist
+	 */
+	@GetMapping("/{partyId}/playlist")
+	public ResponseEntity<Playlist> getPlaylistInParty(@PathVariable Integer partyId) {
+		try {
+			Playlist playlist = partyDao.getPlaylistInParty(partyId);
+			return ResponseEntity.ok(playlist);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
