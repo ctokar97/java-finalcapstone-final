@@ -7,10 +7,12 @@ import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.services.MappingServices.SongMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcSongDao implements SongDao {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -31,7 +33,7 @@ public class JdbcSongDao implements SongDao {
 	public List<Song> getAllSongs() {
 		List<Song> songs = new ArrayList<>();
 		Song song = new Song();
-		String sql = "SELECT * FROM song";
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -54,7 +56,7 @@ public class JdbcSongDao implements SongDao {
 	@Override
 	public Song getSongByName(String songName) {
 		Song song = new Song();
-		String sql = "SELECT * FROM song WHERE song_name = ?";
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song WHERE song_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, songName);
 			if (results.next()) {

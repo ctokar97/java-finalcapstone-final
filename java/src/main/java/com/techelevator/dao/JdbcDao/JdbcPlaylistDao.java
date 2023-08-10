@@ -3,22 +3,29 @@ package com.techelevator.dao.JdbcDao;
 import com.techelevator.dao.DaoInterface.PlaylistDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Playlist;
+import com.techelevator.model.Song;
 import com.techelevator.services.MappingServices.PlaylistMapper;
+import com.techelevator.services.MappingServices.SongMapper;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcPlaylistDao implements PlaylistDao {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final PlaylistMapper playlistMapper;
+	private final SongMapper songMapper;
 
-	public JdbcPlaylistDao(JdbcTemplate jdbcTemplate, PlaylistMapper playlistMapper) {
+	public JdbcPlaylistDao(JdbcTemplate jdbcTemplate, PlaylistMapper playlistMapper , SongMapper songMapper) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.playlistMapper = playlistMapper;
+		this.songMapper = songMapper;
 	}
 
 
@@ -32,7 +39,7 @@ public class JdbcPlaylistDao implements PlaylistDao {
 	public List<Playlist> getAllPlaylists() {
 		List<Playlist> playlists = new ArrayList<>();
 		Playlist playlist = new Playlist();
-		String sql = "SELECT * FROM playlist";
+		String sql = "SELECT playlist_id, playlist_name, party_id FROM playlist";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -54,7 +61,7 @@ public class JdbcPlaylistDao implements PlaylistDao {
 	 */
 	@Override
 	public Playlist getPlaylistByName(String name) {
-		String sql = "SELECT * FROM playlist WHERE playlist_name = ?";
+		String sql = "SELECT playlist_id, playlist_name, party_id FROM playlist WHERE playlist_name = ?";
 		Playlist playlist = null;
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, name);
@@ -65,6 +72,29 @@ public class JdbcPlaylistDao implements PlaylistDao {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
 		return playlist;
+	}
+
+	/**
+	 * Retrieves the list of songs in a given playlist.
+	 *
+	 * @param playlistId the ID of the playlist
+	 * @return a list of songs in the playlist, or an empty list if the playlist is empty
+	 * @throws DaoException if there is an error connecting to the database
+	 */
+	@Override
+	public List<Song> getSongsInPlaylist(int playlistId) {
+		List<Song> songs = new ArrayList<>();
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song INNER JOIN playlist_song USING(song_id) WHERE playlist_id = ?";
+		try {
+			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, playlistId);
+			while (results.next()) {
+				Song song = songMapper.mapRowToSong(results);
+				songs.add(song);
+			}
+		} catch (CannotGetJdbcConnectionException e) {
+			throw new DaoException("Unable to connect to server or database", e);
+		}
+		return songs;
 	}
 
 	/**
@@ -111,6 +141,6 @@ public class JdbcPlaylistDao implements PlaylistDao {
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
-		return newPlaylist;
+		return getPlaylistByName(newPlaylist.getPlaylist_name());
 	}
 }
