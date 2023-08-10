@@ -64,13 +64,13 @@ public class PartyController {
 	 *         or ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) if an exception occurs
 	 */
 	@GetMapping("/{partyId}/users")
-	public ResponseEntity<String> getUsersInParty(@PathVariable Integer partyId) {
+	public ResponseEntity<List<User>> getUsersInParty(@PathVariable Integer partyId) {
+		List<User> users;
 		try {
-			List<User> users = partyDao.getUsersInParty(partyId);
-			return ResponseEntity.ok(users.toString());
+			users = partyDao.getUsersInParty(partyId);
+			return ResponseEntity.ok(users);
 		} catch (Exception e) {
-			String errorMessage = "An error occurred while trying to fetch users in party: " + e.getMessage();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
