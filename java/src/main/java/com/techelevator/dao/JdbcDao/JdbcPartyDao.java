@@ -32,6 +32,8 @@ public class JdbcPartyDao implements PartyDao {
 		this.playlistMapper = playlistMapper;
 	}
 
+
+
 	/**
 	 * Retrieves all parties from the database.
 	 *
