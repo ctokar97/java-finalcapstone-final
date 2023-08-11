@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.dao.JdbcDao.JdbcPartyDao;
 import com.techelevator.model.Party;
+import com.techelevator.model.User;
 import com.techelevator.services.MappingServices.PartyMapper;
 import com.techelevator.services.MappingServices.PlaylistMapper;
 import com.techelevator.services.MappingServices.UserMapper;
@@ -92,5 +93,23 @@ public class JdbcPartyDaoTests extends BaseDaoTests {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getParty_name(), actual.getParty_name());
     }
+
+    @Test
+    public void getUsersInParty_using_partyId() {
+       List<User> usersInParty1 = sut.getUsersInParty(1);
+       Assert.assertEquals(1,usersInParty1.size());
+
+
+        List<User> usersInParty2 = sut.getUsersInParty(2);
+        Assert.assertEquals(1,usersInParty2.size());
+
+
+        List<User> usersInParty6 = sut.getUsersInParty(6);
+        Assert.assertEquals(0,usersInParty6.size());
+
+
+    }
+
+
 
 }
