@@ -33,15 +33,6 @@ CREATE TABLE song (
                       CONSTRAINT PK_song PRIMARY KEY (song_id)
 );
 
-CREATE TABLE requested (
-                       requested_id SERIAL,
-                       requested_name varchar(100) NOT NULL,
-                       requested_artist varchar(50) NOT NULL,
-                       requested_genre varchar(50) NOT NULL,
-                       requested_user_genre varchar(50),
-                       CONSTRAINT PK_requested PRIMARY KEY (requested_song_id)
-);
-
 CREATE TABLE user_party (
                             user_id int NOT NULL,
                             party_id int NOT NULL,
@@ -57,13 +48,5 @@ CREATE TABLE playlist_song (
                                CONSTRAINT FK_playlist_playlist_song FOREIGN KEY (playlist_id) REFERENCES playlist(playlist_id),
                                CONSTRAINT FK_song_playlist_song FOREIGN KEY (song_id) REFERENCES song(song_id)
 );
-
-CREATE TABLE song_requested (
-                            song_id int NOT NULL,
-                            requested_id int NOT NULL,
-                            CONSTRAINT PK_song_requested PRIMARY KEY (song_id, requested_id),
-                            CONSTRAINT FK_song_song_requested FOREIGN KEY (song_id) REFERENCES song(song_id),
-                            CONSTRAINT FK_requested_song_requested FOREIGN KEY (requested_id) REFERENCES requested(requested_id)
-)
 
 COMMIT TRANSACTION;
