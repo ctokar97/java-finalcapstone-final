@@ -21,6 +21,7 @@
         <button type="submit" @click="makeUserRoleDJ">Create DJ Account</button>
         <button type="submit" @click="makeUserRoleUser">Create Regular Account</button>
         <p>
+          <NavigateToEventsButton class="navigate-to-parties"/>
           <router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link>
         </p>
       </form>
@@ -30,9 +31,11 @@
 
 <script>
 import authService from '../services/AuthService';
+import NavigateToEventsButton from "@/components/NavigateToEventsButton.vue";
 
 export default {
   name: 'register',
+  components: {NavigateToEventsButton},
   data() {
     return {
       user: {
@@ -127,5 +130,10 @@ label {
 
 .fade-enter, .fade-leave-to {
   opacity: 15%;
+}
+
+.navigate-to-parties {
+  display: flex;
+  justify-content: center;
 }
 </style>

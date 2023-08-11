@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import partyService from "@/services/PartyService";
 import playlistService from "@/services/PlaylistService";
+import RequestService from "@/services/RequestService";
 
 Vue.use(Vuex)
 
@@ -22,7 +23,7 @@ export default new Vuex.Store({
   state: {
     token: currentToken || '',
     user: currentUser || {},
-    parties: {}
+    parties: []
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -68,12 +69,22 @@ export default new Vuex.Store({
         }
       }));
 
+      await Promise.all(parties.map(async (party) => {
+        let response = await RequestService.getAllRequests();
+        let requests = response.data;
+        requests = requests.filter(request => request.party_id === party.id);
+        party.requests = requests;
+      }));
+
       commit('SET_PARTIES', parties);
     }
   },
   getters: {
     getParties: state => {
         return state.parties;
+    },
+    getPartyById: (state) => (id) => {
+      return state.parties.find(party => party.id === Number(id));
     }
   }
 })

@@ -19,6 +19,7 @@
         </div>
         <button type="submit">Sign in</button>
         <p>
+          <NavigateToEventsButton class="navigate-to-parties"/>
           <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link>
         </p>
       </form>
@@ -28,10 +29,13 @@
 
 <script>
 import authService from "../services/AuthService";
+import NavigateToEventsButton from "@/components/NavigateToEventsButton.vue";
 
 export default {
   name: "login",
-  components: {},
+  components: {
+    NavigateToEventsButton
+  },
   data() {
     return {
       user: {
@@ -110,8 +114,14 @@ h1 {
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 15%;
+}
+
+.navigate-to-parties {
+  display: flex;
+  justify-content: center;
 }
 
 </style>

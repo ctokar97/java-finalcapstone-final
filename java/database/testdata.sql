@@ -44,6 +44,48 @@ INSERT INTO playlist_song (playlist_id, song_id) VALUES
 
 COMMIT;
 
+-- BEGIN TRANSACTION;
+-- DO
+-- $$
+--     DECLARE
+--         i INTEGER;
+--         j INTEGER;
+--         k INTEGER;
+--         current_party_id INTEGER;
+--         current_user_id INTEGER;
+--         current_playlist_id INTEGER;
+--         current_song_id INTEGER;
+--     BEGIN
+--         FOR i IN 1..15 LOOP
+--                 INSERT INTO party (party_name) VALUES ('party' || i)
+--                 RETURNING party_id INTO current_party_id;
+--
+--                 INSERT INTO playlist (playlist_name, party_id)
+--                 VALUES ('playlist' || i, current_party_id)
+--                 RETURNING playlist_id INTO current_playlist_id;
+--
+--                 FOR j IN 1..15 LOOP
+--                         INSERT INTO users (username, password_hash, role)
+--                         VALUES ('user' || ((i - 1) * 15 + j), 'password' || ((i - 1) * 15 + j), 'user')
+--                         RETURNING user_id INTO current_user_id;
+--
+--                         INSERT INTO user_party(user_id, party_id) VALUES (current_user_id, current_party_id);
+--                     END LOOP;
+--
+--                 FOR k IN 1..10 LOOP
+--                         INSERT INTO song (song_name, artist, genre, user_genre)
+--                         VALUES ('song' || ((i - 1) * 10 + k), 'artist' || ((i - 1) * 10 + k), 'genre' || ((i - 1) * 10 + k),
+--                                 'user_genre' || ((i - 1) * 10 + k))
+--                         RETURNING song_id INTO current_song_id;
+--
+--                         INSERT INTO playlist_song (playlist_id, song_id)
+--                         VALUES (current_playlist_id, current_song_id);
+--                     END LOOP;
+--             END LOOP;
+--     END;
+-- $$;
+-- COMMIT;
+
 BEGIN TRANSACTION;
 DO
 $$
@@ -51,10 +93,12 @@ $$
         i INTEGER;
         j INTEGER;
         k INTEGER;
+        l INTEGER;
         current_party_id INTEGER;
         current_user_id INTEGER;
         current_playlist_id INTEGER;
         current_song_id INTEGER;
+        current_request_song_id INTEGER;
     BEGIN
         FOR i IN 1..15 LOOP
                 INSERT INTO party (party_name) VALUES ('party' || i)
@@ -80,6 +124,16 @@ $$
 
                         INSERT INTO playlist_song (playlist_id, song_id)
                         VALUES (current_playlist_id, current_song_id);
+                    END LOOP;
+
+                FOR l IN 1..10 LOOP
+                        INSERT INTO song (song_name, artist, genre, user_genre)
+                        VALUES ('extra_song' || ((i - 1) * 10 + l), 'artist' || ((i - 1) * 10 + l), 'genre' || ((i - 1) * 10 + l),
+                                'user_genre' || ((i - 1) * 10 + l))
+                        RETURNING song_id INTO current_request_song_id;
+
+                        INSERT INTO request_list (party_id, song_id)
+                        VALUES (current_party_id, current_request_song_id);
                     END LOOP;
             END LOOP;
     END;
