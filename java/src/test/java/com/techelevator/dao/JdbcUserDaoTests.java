@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.dao.JdbcDao.JdbcUserDao;
 import com.techelevator.exception.DaoException;
+import com.techelevator.model.Playlist;
 import com.techelevator.security.RegisterUserDto;
 import com.techelevator.model.User;
 import org.junit.Assert;
@@ -84,6 +85,17 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         sut.createUser(registerUserDto);
     }
 
+    @Test
+    public void change_user_role() {
+        User userToUpdate = sut.getUserById(1);
+
+        userToUpdate.setAuthority("DJ");
+
+        //User updatedUser = sut.changeUserRole(1, "DJ");
+
+        sut.changeUserRole(1,"DJ");
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void createUser_with_null_password() {
         RegisterUserDto registerUserDto = new RegisterUserDto();
@@ -106,4 +118,12 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         User retrievedUser = sut.getUserByUsername(createdUser.getUsername());
         Assert.assertEquals(retrievedUser, createdUser);
     }
+
+    private void assertUserMatch(User expected, User actual) {
+        Assert.assertEquals(expected.getId(),actual.getId());
+        Assert.assertEquals(expected.getUsername(), actual.getUsername());
+        Assert.assertEquals(expected.getPassword(), actual.getPassword());
+        Assert.assertEquals(expected.getAuthorities(), actual.getAuthorities());
+    }
+
 }

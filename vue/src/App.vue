@@ -20,7 +20,7 @@ body {
   width: 100vw;
   overflow-x: hidden;
   color: #fff;
-  background: linear-gradient(45deg, pink, blue, orange, green, lightgreen);
+  background: linear-gradient(45deg, purple, pink, blue, green);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
 }
