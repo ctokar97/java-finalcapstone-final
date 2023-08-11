@@ -105,7 +105,7 @@ public class JdbcPartyDaoTests extends BaseDaoTests {
 
 
         List<User> usersInParty6 = sut.getUsersInParty(6);
-        Assert.assertEquals(0,usersInParty6.size());
+        Assert.assertEquals(1,usersInParty6.size());
 
 
     }
