@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.dao.JdbcDao.JdbcPlaylistDao;
 import com.techelevator.model.Playlist;
+import com.techelevator.model.Song;
 import com.techelevator.services.MappingServices.PlaylistMapper;
 import com.techelevator.services.MappingServices.SongMapper;
 import org.junit.Assert;
@@ -47,6 +48,21 @@ public class JdbcPlaylistDaoTests extends BaseDaoTests {
 
                 Playlist actualPlaylist5 = sut.getPlaylistByName(PLAYLIST_5.getPlaylist_name());
                 Assert.assertEquals(PLAYLIST_5.getPlaylist_name(),actualPlaylist5.getPlaylist_name());
+        }
+
+        @Test
+        public void get_songs_in_playlist () {
+                List<Song> songsInPlaylist1 = sut.getSongsInPlaylist(1);
+                Assert.assertEquals(1, songsInPlaylist1.size());
+
+                List<Song> songsInPlaylist2 = sut.getSongsInPlaylist(2);
+                Assert.assertEquals(1, songsInPlaylist2.size());
+
+                List<Song> songsInPlaylist5 = sut.getSongsInPlaylist(5);
+                Assert.assertEquals(1, songsInPlaylist5.size());
+
+                List<Song> songsInPlaylist0 = sut.getSongsInPlaylist(0);
+                Assert.assertEquals(0, songsInPlaylist0.size());
         }
 
         @Test
