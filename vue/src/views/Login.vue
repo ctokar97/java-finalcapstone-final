@@ -23,6 +23,7 @@
           <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link>
         </p>
       </form>
+      <button @click="getSpotifyUserLogin">Login to Spotify</button>
     </div>
   </transition>
 </template>
@@ -30,6 +31,7 @@
 <script>
 import authService from "../services/AuthService";
 import NavigateToEventsButton from "@/components/NavigateToEventsButton.vue";
+import SpotifyServices from "@/services/SpotifyServices";
 
 export default {
   name: "login",
@@ -47,6 +49,16 @@ export default {
     };
   },
   methods: {
+    getSpotifyUserLogin() {
+      const getSpotifyUserLogin = () => {
+        fetch("http://localhost:9000/api/login")
+            .then((response) => response.text())
+            .then(response => {
+              window.location.replace(response);
+            })
+      }
+      return getSpotifyUserLogin();
+    },
     login() {
       authService
           .login(this.user)
