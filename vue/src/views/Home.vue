@@ -2,6 +2,7 @@
   <transition name="fade" v-if="show">
     <div class="home">
       <h1>Check out these parties!</h1>
+      <button @click="getSpotifyUserLogin">Log into Spotify!</button>
       <PartyContainer/>
     </div>
   </transition>
@@ -28,6 +29,19 @@ export default {
   created() {
     this.$store.dispatch('fetchParty');
   },
+
+  methods: {
+    getSpotifyUserLogin() {
+      const getSpotifyUserLogin = () => {
+        fetch("http://localhost:9000/api/login")
+            .then((response) => response.text())
+            .then(response => {
+              window.location.replace(response);
+            })
+      }
+      return getSpotifyUserLogin();
+    },
+  }
 }
 </script>
 

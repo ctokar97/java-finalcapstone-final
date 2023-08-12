@@ -118,7 +118,7 @@ $$
 
                 FOR k IN 1..10 LOOP
                         INSERT INTO song (song_name, artist, genre, user_genre)
-                        VALUES ('song' || ((i - 1) * 10 + k), 'artist' || ((i - 1) * 10 + k), 'genre' || ((i - 1) * 10 + k),
+                        VALUES ('Take Forever', 'Colony Collapse', 'genre' || ((i - 1) * 10 + k),
                                 'user_genre' || ((i - 1) * 10 + k))
                         RETURNING song_id INTO current_song_id;
 
@@ -128,7 +128,7 @@ $$
 
                 FOR l IN 1..10 LOOP
                         INSERT INTO song (song_name, artist, genre, user_genre)
-                        VALUES ('extra_song' || ((i - 1) * 10 + l), 'artist' || ((i - 1) * 10 + l), 'genre' || ((i - 1) * 10 + l),
+                        VALUES ('Take Forever', 'Colony Collapse', 'genre' || ((i - 1) * 10 + l),
                                 'user_genre' || ((i - 1) * 10 + l))
                         RETURNING song_id INTO current_request_song_id;
 

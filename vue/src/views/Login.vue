@@ -31,7 +31,6 @@
 <script>
 import authService from "../services/AuthService";
 import NavigateToEventsButton from "@/components/NavigateToEventsButton.vue";
-import SpotifyServices from "@/services/SpotifyServices";
 
 export default {
   name: "login",
