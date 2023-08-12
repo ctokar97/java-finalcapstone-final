@@ -1,4 +1,6 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "PartyDetail",
   props: ['id'],
@@ -11,6 +13,31 @@ export default {
   created() {
     this.$store.dispatch('fetchParty');
   },
+  methods: {
+    async setSpotifyIDs() {
+      for (const song of this.party.playlist.songs) {
+        console.log('Song:', song);  // Add this line
+        const query = 'track:' + song.song_name + ' artist:' + song.artist;
+        console.log('Query:', query);  // Add this line
+        const spotifySong = await this.searchTrack(query);
+        console.log('Spotify data:', spotifySong);  // Add this line
+        if (spotifySong && spotifySong.id) {   // Accessing id directly now
+          this.$set(song, 'spotifyId', spotifySong.id);
+        }
+      }
+    },
+    async searchTrack(query) {
+      try {
+        console.log('Query:', query);  // Add this line
+        const response = await axios.get('http://localhost:9000/api/search', {params: {q: query}});
+        console.log('Response:', response); // Add this line
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    },
+  }
 }
 </script>
 
@@ -23,22 +50,48 @@ export default {
         </div>
         <div class="detail-view">
           <div class="details">
+            <div class="iframe">
+              <div class="party-detail-playlist">
+                <p class="playlist">Playlist:</p>
+                <div class="scrolling-playlist">
+                  <!-- Some codes are omitted for brevity -->
+                  <div class="song" v-for="(song) in party.playlist.songs" :key="song.id">
+                    <div class="album-art"></div>
+                    <div class="song-data">
+                      <iframe class="song-data-display" :src="'https://open.spotify.com/embed/track/' + song.spotifyId"
+                              frameborder="0"
+                              allowtransparency="true"
+                              allow="encrypted-media">
+                      </iframe>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="people-playing">People playing:</p>
+              <div class="party-detail-users">
+                <div class="scrolling-users">
+                  <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
+                </div>
+              </div>
+            </div>
             <div class="party-detail-users">
               <p>People playing:</p>
               <div class="scrolling-users">
                 <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
               </div>
             </div>
-            <div class="party-detail-playlist">
-              <p>Playlist:</p>
-              <div class="scrolling-playlist">
-                <div class="song" v-for="song in party.playlist.songs" :key="song.id">
-                  <div class="song-data">
-                    <div class="song-name song-data-display">{{ song.song_name }}</div>
-                    <div class="song-artist song-data-display">{{ song.artist }}</div>
-                    <div class="song-genre song-data-display">{{ song.user_genre }}</div>
+            <div class="non-iframe">
+              <div class="party-detail-playlist">
+                <p>Playlist:</p>
+                <div class="scrolling-playlist">
+                  <div class="song" v-for="song in party.playlist.songs" :key="song.id">
+                    <div class="song-data">
+                      <div class="song-name song-data-display">{{ song.song_name }}</div>
+                      <div class="song-artist song-data-display">{{ song.artist }}</div>
+                      <div class="song-genre song-data-display">{{ song.user_genre }}</div>
+                    </div>
+                    <div class="album-art"></div>
                   </div>
-                  <div class="album-art"></div>
                 </div>
               </div>
             </div>
@@ -73,6 +126,7 @@ export default {
   flex-direction: column;
   justify-content: space-around;
 }
+
 .detail-view {
   display: flex;
   justify-content: space-around;;
