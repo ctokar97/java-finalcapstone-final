@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DaoInterface.RequestDao;
 import com.techelevator.model.Request;
+import com.techelevator.model.Song;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,12 +49,26 @@ public class RequestController {
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<List<Request>> createRequest(@RequestBody Request request) {
-		List<Request> requests;
+	@GetMapping("/{requestId}/songs")
+	public ResponseEntity<Song> getSongByRequestId(@PathVariable int requestId) {
+		Song song = null;
 		try {
-			requests = requestDao.createRequest(request);
-			return ResponseEntity.created(URI.create("/request/" + request.getId())).body(requests);
+			song = requestDao.getSongByRequestId(requestId);
+			if ( song == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(song);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	@PostMapping
+	public ResponseEntity<Request> createRequest(@RequestBody Request request) {
+		Request createdRequest;
+		try {
+			createdRequest = requestDao.createRequest(request);
+			return ResponseEntity.created(URI.create("/request/" + request.getId())).body(createdRequest);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
 		}

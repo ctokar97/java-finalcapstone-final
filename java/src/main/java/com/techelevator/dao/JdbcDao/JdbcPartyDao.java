@@ -57,6 +57,20 @@ public class JdbcPartyDao implements PartyDao {
 		return parties;
 	}
 
+	@Override
+	public Party getPartyById(int partyId) {
+		Party party = new Party();
+		String sql = "SELECT party_id, party_name, party_owner FROM party WHERE party_id = ?";
+		try {
+			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyId);
+			if (results.next()) {
+				party = partyMapper.mapRowToParty(results);
+			}
+		} catch (CannotGetJdbcConnectionException e) {
+			throw new DaoException("Unable to connect to server or database", e);
+		}
+		return party;
+	}
 	/**
 	 * Retrieves a Party object from the database based on the given party name.
 	 *
@@ -165,5 +179,15 @@ public class JdbcPartyDao implements PartyDao {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
 		return newParty;
+	}
+	@Override
+	public Party assignPartyToUser(int partyId, int userId) {
+		String sql = "UPDATE party SET party_owner = ? WHERE party_id = ?";
+		try {
+			jdbcTemplate.update(sql, userId, partyId);
+		} catch (CannotGetJdbcConnectionException e) {
+			throw new DaoException("Unable to connect to server or database", e);
+		}
+		return getPartyById(partyId);
 	}
 }

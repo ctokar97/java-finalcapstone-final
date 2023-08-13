@@ -77,7 +77,7 @@ public class JdbcSongDaoTests extends BaseDaoTests {
 
         genreToUpdate.setUser_genre("Jam");
 
-        Song updatedGenre = sut.updateGenre(genreToUpdate);
+        Song updatedGenre = sut.updateSong(genreToUpdate);
 
         assertSongMatch(genreToUpdate, updatedGenre);
     }

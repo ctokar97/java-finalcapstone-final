@@ -59,5 +59,9 @@ export default {
      */
     updateParty(party) {
         return axios.put(`/party/${party.id}`, party);
+    },
+
+    assignPartyToUser(partyId, userId) {
+        return axios.put(`/party/${partyId}/owner`, userId);
     }
 }

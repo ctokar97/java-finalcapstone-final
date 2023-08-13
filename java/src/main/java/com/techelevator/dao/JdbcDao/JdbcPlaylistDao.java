@@ -84,7 +84,7 @@ public class JdbcPlaylistDao implements PlaylistDao {
 	@Override
 	public List<Song> getSongsInPlaylist(int playlistId) {
 		List<Song> songs = new ArrayList<>();
-		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song INNER JOIN playlist_song USING(song_id) WHERE playlist_id = ?";
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre, spotify_id FROM song INNER JOIN playlist_song USING(song_id) WHERE playlist_id = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, playlistId);
 			while (results.next()) {

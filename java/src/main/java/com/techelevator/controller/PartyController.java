@@ -133,4 +133,15 @@ public class PartyController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+
+	@PutMapping("/{partyId}/owner")
+	public ResponseEntity<Party> assignPartyToUser(@PathVariable Integer partyId, @RequestBody User user) {
+		Party party;
+		try {
+			party = partyDao.assignPartyToUser(partyId, user.getId());
+			return ResponseEntity.ok(party);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 }

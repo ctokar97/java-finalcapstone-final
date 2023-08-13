@@ -2,6 +2,7 @@
   <transition name="fade" v-if="show">
     <div class="home">
       <h1>Check out these parties!</h1>
+      <button v-if="hasRoleDJ">create a party</button>
       <button @click="getSpotifyUserLogin">Log into Spotify!</button>
       <PartyContainer/>
     </div>
@@ -11,6 +12,7 @@
 
 <script>
 import PartyContainer from "@/components/PartyContainer.vue";
+import {mapState} from "vuex";
 
 export default {
   name: "home",
@@ -28,6 +30,15 @@ export default {
 
   created() {
     this.$store.dispatch('fetchParty');
+    console.log(this.userAuthorities);
+  },
+  computed: {
+    ...mapState({
+      userAuthorities: state => state.user.authorities
+    }),
+    hasRoleDJ() {
+      return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
+    }
   },
   methods: {
     getSpotifyUserLogin() {
@@ -40,6 +51,9 @@ export default {
       }
       return getSpotifyUserLogin();
     },
+    showCurrentUser() {
+      console.log(this.user);
+    }
   }
 }
 </script>
