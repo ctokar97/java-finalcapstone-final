@@ -10,4 +10,6 @@ public class Party {
 
 	private int id;
 	private String party_name;
+	private int party_owner;
+	private String theme;
 }

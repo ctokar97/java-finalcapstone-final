@@ -195,4 +195,3 @@ $$
     END;
 $$;
 COMMIT;
-ROLLBACK

@@ -14,6 +14,7 @@ CREATE TABLE party (
                        party_id SERIAL,
                        party_name varchar(50) NOT NULL UNIQUE,
                        party_owner int,
+                       theme varchar(50),
                        CONSTRAINT PK_party PRIMARY KEY (party_id),
                        CONSTRAINT FK_party_owner FOREIGN KEY (party_owner) REFERENCES users(user_id)
 );

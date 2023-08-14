@@ -2,8 +2,9 @@
   <transition name="fade" v-if="show">
     <div class="home">
       <h1>Check out these parties!</h1>
-      <button v-if="hasRoleDJ">create a party</button>
+      <button v-if="hasRoleDJ" @click="showPartyCreator = !showPartyCreator">create a party</button>
       <button @click="getSpotifyUserLogin">Log into Spotify!</button>
+      <PartyCreator v-if = "showPartyCreator" @close = "showPartyCreator = false"></PartyCreator>
       <PartyContainer/>
     </div>
   </transition>
@@ -13,15 +14,18 @@
 <script>
 import PartyContainer from "@/components/PartyContainer.vue";
 import {mapState} from "vuex";
+import PartyCreator from "@/components/PartyCreator.vue";
 
 export default {
   name: "home",
   components: {
+    PartyCreator,
     PartyContainer
   },
   data() {
     return {
-      show: false
+      show: false,
+      showPartyCreator: false
     };
   },
   mounted() {
@@ -75,6 +79,7 @@ h1 {
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 15%;
 }

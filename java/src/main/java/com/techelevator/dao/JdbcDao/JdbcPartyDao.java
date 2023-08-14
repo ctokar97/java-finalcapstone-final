@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class JdbcPartyDao implements PartyDao {
 	public List<Party> getAllParties() {
 		List<Party> parties = new ArrayList<>();
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name FROM party";
+		String sql = "SELECT party_id, party_name, party_owner, theme FROM party";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -60,7 +61,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyById(int partyId) {
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name, party_owner FROM party WHERE party_id = ?";
+		String sql = "SELECT party_id, party_name, party_owner, theme FROM party WHERE party_id = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyId);
 			if (results.next()) {
@@ -81,7 +82,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyByName(String partyName) {
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name FROM party WHERE party_name = ?";
+		String sql = "SELECT party_id, party_name, party_owner, theme FROM party WHERE party_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyName);
 			if (results.next()) {
@@ -150,10 +151,12 @@ public class JdbcPartyDao implements PartyDao {
 	public Party createParty(Party party) {
 		Party newParty = new Party();
 		newParty.setParty_name(party.getParty_name());
+		newParty.setParty_owner(party.getParty_owner());
+		newParty.setTheme(party.getTheme());
 
-		String sql = "INSERT INTO party (party_name) VALUES (?)";
+		String sql = "INSERT INTO party (party_name, party_owner, theme) VALUES (? , ? , ?)";
 		try {
-			jdbcTemplate.update(sql, newParty.getParty_name());
+			jdbcTemplate.update(sql, newParty.getParty_name(), newParty.getParty_owner(), newParty.getTheme());
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
@@ -180,11 +183,16 @@ public class JdbcPartyDao implements PartyDao {
 		}
 		return newParty;
 	}
+
 	@Override
 	public Party assignPartyToUser(int partyId, int userId) {
 		String sql = "UPDATE party SET party_owner = ? WHERE party_id = ?";
+		int updatedRows = 0;
 		try {
-			jdbcTemplate.update(sql, userId, partyId);
+			updatedRows = jdbcTemplate.update(sql, userId, partyId);
+			if ( updatedRows == 0 ) {
+				throw new DaoException("Update failed: No such party id found");
+			}
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}

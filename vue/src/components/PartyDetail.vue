@@ -11,7 +11,7 @@ export default {
     return {
       request: {
         party_id: '',
-        song_id:''
+        song_id: ''
       },
       song: {
         song_name: '',
@@ -26,12 +26,12 @@ export default {
       return this.$store.getters.getPartyById(this.id);
     }
   },
-async created() {
+  async created() {
     await this.$store.dispatch('fetchParty');
-      await this.setSpotifyIDs();
-      await this.setSpotifyIDsForRequests();
+    await this.setSpotifyIDs();
+    await this.setSpotifyIDsForRequests();
 
-},
+  },
   methods: {
     async setSpotifyIDsForRequests() {
       await Promise.all(
@@ -105,239 +105,188 @@ async created() {
 </script>
 
 <template>
-  <div>
-    <div class="party-detail-view" v-if="party">
-      <div class="party-detail-container">
-        <div class="party-detail-name">
-          <h1>{{ party.party_name }}</h1>
-        </div>
-        <div class="detail-view">
-          <div class="details">
-            <div class="iframe">
-              <div class="party-detail-playlist">
-                <p class="playlist">Playlist:</p>
-                <div class="scrolling-playlist">
-                  <!-- Some codes are omitted for brevity -->
-                  <div class="song" v-for="(song) in party.playlist.songs" :key="song.id">
-                    <iframe class="song-data-display" :src="'https://open.spotify.com/embed/track/' + song.spotify_id"
-                            frameborder="0"
+  <!-- Language: HTML -->
+  <div v-if="party" class="party-detail-view">
+    <div class="party-detail-container">
 
-                            allowtransparency="true"
-                            allow="encrypted-media">
-                    </iframe>
-                  </div>
-                </div>
+      <!-- Party Name should be in header for semantics -->
+      <header class="party-detail-name">
+        <h1>{{ party.party_name }}</h1>
+      </header>
+
+      <div class="party-detail-and-request">
+        <!-- Playlist and People -->
+        <section class="detail-view">
+          <div class="playlist-users-container">
+
+            <!-- Party Playlist -->
+            <h2 class="playlist">Playlist:</h2>
+            <div class="scrolling-playlist">
+              <div
+                  v-for="(song) in party.playlist.songs"
+                  :key="song.id"
+                  class="song">
+                <iframe
+                    class="song-data-display"
+                    :src="'https://open.spotify.com/embed/track/' + song.spotify_id"
+                    frameborder="0"
+                    allowtransparency="true"
+                    allow="encrypted-media">
+                </iframe>
               </div>
-              <p class="people-playing">People playing:</p>
+            </div>
+
+
+            <!-- Users -->
+            <div class="user-information">
+              <h2 class="people-playing">People playing:</h2>
               <div class="party-detail-users">
                 <div class="scrolling-users">
-                  <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
+                  <p
+                      v-for="user in party.users"
+                      :key="user.id"
+                      class="username">{{ user.username }}
+                  </p>
                 </div>
               </div>
             </div>
-            <!--            <div class="non-iframe">-->
-            <!--              <div class="party-detail-users">-->
-            <!--                <p>People playing:</p>-->
-            <!--                <div class="scrolling-users">-->
-            <!--                  <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--              <div class="party-detail-playlist">-->
-            <!--                <p>Playlist:</p>-->
-            <!--                <div class="scrolling-playlist">-->
-            <!--                  <div class="song" v-for="song in party.playlist.songs" :key="song.id">-->
-            <!--                    <div class="song-data">-->
-            <!--                      <div class="song-name song-data-display">{{ song.song_name }}</div>-->
-            <!--                      <div class="song-artist song-data-display">{{ song.artist }}</div>-->
-            <!--                      <div class="song-genre song-data-display">{{ song.user_genre }}</div>-->
-            <!--                    </div>-->
-            <!--                    <div class="album-art"></div>-->
-            <!--                  </div>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
+
           </div>
-          <div class="request-view">
-            <div class="request-container">
-              <div class="request-form">
-                <div class="song" v-for="(request) in party.requests" :key="request.id">
-                  <iframe class="song-data-display"
-                          :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
-                          frameborder="0"
-                          allowtransparency="true"
-                          allow="encrypted-media">
-                  </iframe>
-                </div>
-                <form @submit.prevent="submitForm">
-                  <label for="song_name"> Song Name</label>
-                  <input type="text" id="song_name" v-model="song.song_name" required>
+        </section>
 
-                  <label for="artist"> Artist</label>
-                  <input type="text" id="artist" v-model="song.artist" required>
+        <!-- Requests -->
+        <section class="request-view">
+          <div class="request-container">
+            <h2 class="playlist">Playlist:</h2>
 
-                  <label for="user_genre"> Genre</label>
-                  <input type="text" id="user_genre" v-model="song.genre" required>
-
-                  <input type="submit" value="Submit">
-                </form>
+            <div class="scrolling-request">
+              <!-- Song Requests -->
+              <div
+                  v-for="(request) in party.requests"
+                  :key="request.id"
+                  class="song">
+                <iframe
+                    class="song-data-display"
+                    :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
+                    frameborder="0"
+                    allowtransparency="true"
+                    allow="encrypted-media">
+                </iframe>
               </div>
             </div>
+
+            <!-- Song Request Form -->
+            <div class="request-form">
+              <form @submit.prevent="submitForm">
+                <label for="song_name"> Song Name</label>
+                <input type="text" id="song_name" v-model="song.song_name" required>
+
+                <label for="artist"> Artist</label>
+                <input type="text" id="artist" v-model="song.artist" required>
+
+                <label for="user_genre"> Genre</label>
+                <input type="text" id="user_genre" v-model="song.genre" required>
+
+                <input type="submit" value="Submit">
+              </form>
+            </div>
+
           </div>
-        </div>
+        </section>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-.party-detail-name {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: -5em;
+
+* {
+  border: 1px solid red;
 }
 
 .party-detail-view {
   display: flex;
-  flex-direction: column;
 }
 
 .party-detail-container {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.party-detail-and-request {
+  display: flex;
   justify-content: space-around;
 }
 
-.party-detail-users {
-  padding: 0 1em 1em;
+.party-detail-name {
+  display: flex;
+  justify-content: center;
 }
 
 .detail-view {
   display: flex;
-  justify-content: space-around;;
+  width: 40%
 }
 
-.playlist {
-  font-size: 2em;
-  margin-left: .2em;
-}
-
-.people-playing {
-  font-size: 2em;
-  margin-left: .2em;
+.playlist-users-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .scrolling-playlist {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: center;
-
+  overflow-y: scroll;
+  justify-content: space-around;
 }
 
-.details {
+.user-information {
   display: flex;
   flex-direction: column;
-  width: 40%;
-  height: 50em;
-
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
-
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-
-  backdrop-filter: blur(10px);
-
-  overflow: scroll;
-}
-
-.request-view {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  height: 50em;
-
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
-
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-
-  backdrop-filter: blur(10px);
-
-  overflow: scroll;
-}
-
-.song {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0.5em 0.5em 1em;
-  width: 45%;
-  height: 20em;
-  padding: 1em;
-  overflow: hidden;
-  position: relative;
-
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
-
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.song-data {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.song-data-display {
-  position: absolute;
-  top: 2.7em;
-  width: 80%;
-  height: 90%;
-}
-
-.album-art {
-  height: 70%;
-  width: 70%;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-  border-radius: 0.5em;
 }
 
 .scrolling-users {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 1em;
-
-  background-color: rgba(255, 255, 255, 0.2);
-
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
+  overflow-y: scroll;
+  justify-content: center;
 }
 
-.username {
+.request-view {
+  display: flex;
+  width: 40%
+}
+
+.request-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.scrolling-request {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: space-around;
+}
+
+.song {
   display: flex;
   justify-content: center;
-  margin: 0.5em;
-  width: 8em;
-  padding: 0.2em;
+  align-items: center;
+  height: 20em;
+}
 
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
-
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+.song-data-display {
+  margin-top: 10em;
+  height: 300px;
+  width: 300px;
 }
 
 </style>
