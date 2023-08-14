@@ -201,10 +201,6 @@ export default {
 
 <style scoped>
 
-//* {
-//  border: 1px solid red;
-//}
-
 .party-detail-view {
   display: flex;
 }
