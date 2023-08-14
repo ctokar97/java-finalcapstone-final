@@ -22,16 +22,10 @@ export default {
     },
 
     /**
-     * Creates a new song.
+     * Creates a new song by making a POST request to '/song' endpoint.
      *
-     * @param {Object} song - The song object to be created.
-     * @param {string} song.title - The title of the song.
-     * @param {string} song.artist - The artist of the song.
-     * @param {string} song.album - The album of the song.
-     * @param {number} song.year - The year when the song was released.
-     * @param {string} song.genre - The genre of the song.
-     *
-     * @returns {Promise} - The Promise object representing the created song.
+     * @param {Object} song - The data object representing the new song.
+     * @return {Promise} - A Promise that resolves to the created song.
      */
     createSong(song) {
         return axios.post('/song', song);
@@ -40,6 +34,7 @@ export default {
     /**
      * Update the genre of a song.
      *
+     * @param songId
      * @param {Object} song - The song object to be updated.
      * @param {number} song.id - The id of the song to be updated.
      * @param {string} song.genre - The new genre for the song.
@@ -48,7 +43,7 @@ export default {
      *
      * @throws {Error} - If an error occurs during the update process.
      */
-    updateGenre(song) {
-        return axios.put(`/song/${song.id}`, song);
+    updateSong(songId, song) {
+        return axios.put(`/song/${songId}`, song);
     }
 }

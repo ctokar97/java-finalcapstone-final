@@ -2,13 +2,9 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DaoInterface.SongDao;
 import com.techelevator.model.Song;
-import okhttp3.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ValidationException;
 import java.net.URI;
 import java.util.List;
 
@@ -81,13 +77,13 @@ public class SongController {
 	 * @return A ResponseEntity containing the updated song with the new genre.
 	 */
 	@PutMapping("/{songId}")
-	public ResponseEntity<Song> updateGenre(@PathVariable Integer songId, @RequestBody Song song) {
+	public ResponseEntity<Song> updateSong(@PathVariable Integer songId, @RequestBody Song song) {
 		Song updatedSong;
 		try {
 			if (songId != song.getSong_id()) {
 				return ResponseEntity.badRequest().body(null);
 			}
-			updatedSong = songDao.updateGenre(song);
+			updatedSong = songDao.updateSong(song);
 			return ResponseEntity.ok(updatedSong);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(null);

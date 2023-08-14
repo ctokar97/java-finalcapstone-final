@@ -13,4 +13,5 @@ public class Song {
 	private String artist;
 	private String genre;
 	private String user_genre;
+	private String spotify_id;
 }

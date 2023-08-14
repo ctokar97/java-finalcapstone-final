@@ -33,7 +33,7 @@ public class JdbcSongDao implements SongDao {
 	public List<Song> getAllSongs() {
 		List<Song> songs = new ArrayList<>();
 		Song song = new Song();
-		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song";
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre, spotify_id FROM song";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -46,6 +46,21 @@ public class JdbcSongDao implements SongDao {
 		return songs;
 	}
 
+	@Override
+	public Song getSongByID(int songID) {
+		Song song = new Song();
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre, spotify_id FROM song WHERE song_id = ?";
+		try {
+			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, songID);
+			if (results.next()) {
+				song = songMapper.mapRowToSong(results);
+			}
+		} catch (CannotGetJdbcConnectionException e) {
+			throw new DaoException("Unable to connect to server or database", e);
+		}
+		return song;
+	}
+
 	/**
 	 * Retrieves a song from the database based on its name.
 	 *
@@ -56,7 +71,7 @@ public class JdbcSongDao implements SongDao {
 	@Override
 	public Song getSongByName(String songName) {
 		Song song = new Song();
-		String sql = "SELECT song_id, song_name, artist, genre, user_genre FROM song WHERE song_name = ?";
+		String sql = "SELECT song_id, song_name, artist, genre, user_genre, spotify_id FROM song WHERE song_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, songName);
 			if (results.next()) {
@@ -81,11 +96,12 @@ public class JdbcSongDao implements SongDao {
 		newSong.setArtist(song.getArtist());
 		newSong.setGenre(song.getGenre());
 		newSong.setUser_genre(song.getUser_genre());
+		newSong.setSpotify_id(song.getSpotify_id());
 
-		String sql = "INSERT INTO song (song_name, artist, genre, user_genre) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO song (song_name, artist, genre, user_genre, spotify_id) VALUES (?, ?, ?, ?, ?)";
 
 		try {
-			jdbcTemplate.update(sql, newSong.getSong_name(), newSong.getArtist(), newSong.getGenre(), newSong.getUser_genre());
+			jdbcTemplate.update(sql, newSong.getSong_name(), newSong.getArtist(), newSong.getGenre(), newSong.getUser_genre(), newSong.getSpotify_id());
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
@@ -99,17 +115,18 @@ public class JdbcSongDao implements SongDao {
 	 * @throws DaoException if there is an error with the database connection
 	 */
 	@Override
-	public Song updateGenre(Song song) {
+	public Song updateSong(Song song) {
 		Song newSong = new Song();
 		newSong.setSong_name(song.getSong_name());
 		newSong.setArtist(song.getArtist());
 		newSong.setGenre(song.getGenre());
 		newSong.setUser_genre(song.getUser_genre());
+		newSong.setSpotify_id(song.getSpotify_id());
 
-		String sql = "UPDATE song SET song_name = ?, artist = ?, genre = ?, user_genre = ? WHERE song_name = ?";
+		String sql = "UPDATE song SET song_name = ?, artist = ?, genre = ?, user_genre = ?, spotify_id = ? WHERE song_id = ?";
 
 		try {
-			jdbcTemplate.update(sql, newSong.getSong_name(), newSong.getArtist(), newSong.getGenre(), newSong.getUser_genre(), newSong.getSong_name());
+			jdbcTemplate.update(sql, newSong.getSong_name(), newSong.getArtist(), newSong.getGenre(), newSong.getUser_genre(), newSong.getSpotify_id(), song.getSong_id());
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
