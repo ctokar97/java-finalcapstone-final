@@ -16,4 +16,5 @@ public interface UserDao {
     User createUser(RegisterUserDto user);
 
     User changeUserRole(Integer userId, String newRole);
+
 }

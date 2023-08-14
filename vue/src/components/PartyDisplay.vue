@@ -67,7 +67,7 @@ export default {
   display: flex;
   justify-content: center;
   margin: 0.5em;
-  width: 7em;
+  width: 8em;
   padding: 0.2em;
 
   background: rgba(255, 255, 255, 0.2);

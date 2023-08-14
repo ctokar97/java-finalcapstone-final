@@ -19,4 +19,8 @@ public interface PartyDao {
 	Party createParty(Party party);
 
 	Party updateParty(Party party);
+
+	Party assignPartyToUser(int partyId, int userId);
+
+	Party getPartyById(int partyId);
 }

@@ -76,6 +76,14 @@ export default new Vuex.Store({
         party.requests = requests;
       }));
 
+      await Promise.all(parties.map(async (party) => {
+        await Promise.all(party.requests.map(async (request) => {
+          let response = await RequestService.getSongsByRequestId(request.id);
+          let song = response.data;
+          request.song = song;
+        }));
+      }));
+
       commit('SET_PARTIES', parties);
     }
   },
