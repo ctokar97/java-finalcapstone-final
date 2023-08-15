@@ -5,7 +5,8 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
-import PartyDetails from "@/views/PartyDetails.vue";
+import PartyDetails from "@/views/PartyDetails.vue"
+import Welcome from '../views/Welcome.vue';
 
 Vue.use(Router)
 
@@ -60,6 +61,14 @@ const router = new Router({
       component: PartyDetails,
         meta: {
             requiresAuth: true
+        }
+    },
+    {
+      path: '/welcome',
+      name: 'welcome',
+      component: Welcome,
+        meta: {
+            requiresAuth: false
         }
     }
   ]
