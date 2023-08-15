@@ -63,7 +63,7 @@ public class JdbcRequestDaoTests extends BaseDaoTests {
             List<Request> retrievedRequest = sut.getRequestsByPartyId(6);
 
             newRequest.setId(6);
-            
+
           /*  Request newRequest = new Request(6, 6, 6);
 
             Request createdRequest = sut.createRequest(newRequest);
@@ -94,7 +94,7 @@ public class JdbcRequestDaoTests extends BaseDaoTests {
             assertPartyMatch(newParty, createdParty);
         }*/
 
-     
+
 
     private void assertRequestMatch(Request expected, Request actual) {
         Assert.assertEquals(expected.getId(),actual.getId());
