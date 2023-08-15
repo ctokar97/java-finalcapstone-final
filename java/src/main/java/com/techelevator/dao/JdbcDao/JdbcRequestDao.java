@@ -2,7 +2,9 @@ package com.techelevator.dao.JdbcDao;
 
 import com.techelevator.dao.DaoInterface.RequestDao;
 import com.techelevator.model.Request;
+import com.techelevator.model.Song;
 import com.techelevator.services.MappingServices.RequestListMapper;
+import com.techelevator.services.MappingServices.SongMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -15,10 +17,12 @@ public class JdbcRequestDao implements RequestDao {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final RequestListMapper requestListMapper;
+	private final SongMapper songMapper;
 
-	public JdbcRequestDao(JdbcTemplate jdbcTemplate, RequestListMapper requestListMapper) {
+	public JdbcRequestDao(JdbcTemplate jdbcTemplate, RequestListMapper requestListMapper, SongMapper songMapper) {
 		this.jdbcTemplate = jdbcTemplate;
 		this.requestListMapper = requestListMapper;
+		this.songMapper = songMapper;
 	}
 
 
@@ -61,23 +65,56 @@ public class JdbcRequestDao implements RequestDao {
 		return requests;
 	}
 
-	/**
-	 * Creates a new request with the given request list.
-	 *
-	 * @param requestList The request list encapsulating the details of the request.
-	 * @return The created request.
-	 */
 	@Override
-	public List<Request> createRequest(Request requestList) {
-		List<Request> requests = new ArrayList<>();
-		String sql = "INSERT INTO request_list (party_id, song_id) VALUES (?, ?)";
+	public Song getSongByRequestId(int requestId) {
+		Song song = new Song();
+		String sql = "SELECT song.song_id, song.song_name, song.artist, song.genre, song.user_genre, song.spotify_id FROM song " +
+				"JOIN request_list ON song.song_id = request_list.song_id " +
+				"WHERE request_list.id = ?";
 		try {
-			jdbcTemplate.update(sql, requestList.getParty_id(), requestList.getSong_id());
-			requests = getRequestsByPartyId(requestList.getParty_id());
+			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, requestId);
+			while (results.next()) {
+				song = songMapper.mapRowToSong(results);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		return requests;
+		return song;
+	}
+
+	@Override
+	public Request getRequestBySongId(int songId) {
+		Request request = new Request();
+		String sql = "SELECT id, party_id, song_id FROM request_list WHERE song_id = ?";
+		try {
+			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, songId);
+			if (results.next()) {
+				request = requestListMapper.mapRowToRequestList(results);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return request;
+	}
+
+	/**
+	 * Creates a new request with the given request list.
+	 *
+	 * @param request The request object representing the details of the request.
+	 * @return The created request object.
+	 */
+	@Override
+	public Request createRequest(Request request) {
+		Request createdRequest;
+		String sql = "INSERT INTO request_list (party_id, song_id) VALUES (?, ?)";
+		try {
+			jdbcTemplate.update(sql, request.getParty_id(), request.getSong_id());
+			createdRequest = getRequestBySongId(request.getSong_id());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return createdRequest;
 	}
 	/**
 	 * Deletes a request with the given ID.

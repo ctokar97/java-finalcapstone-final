@@ -1,5 +1,6 @@
 package com.techelevator.controller;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.techelevator.dao.DaoInterface.PartyDao;
 import com.techelevator.model.Party;
 import com.techelevator.model.Playlist;
@@ -19,6 +20,7 @@ import java.util.List;
 public class PartyController {
 
 	private final PartyDao partyDao;
+	private static final Logger log = LoggerFactory.getLogger(PartyController.class);
 
 	public PartyController(PartyDao partyDao) {
 		this.partyDao = partyDao;
@@ -102,12 +104,19 @@ public class PartyController {
 	 */
 	@PostMapping
 	public ResponseEntity<Party> createParty(@RequestBody Party party, UriComponentsBuilder uriBuilder) {
+		log.debug("Creating party: {}", party);
 		Party createdParty;
 		try {
 			createdParty = partyDao.createParty(party);
-			URI uri = uriBuilder.path("/party/{id").buildAndExpand(createdParty.getId()).toUri();
+			log.debug("Party created: {}", createdParty);
+			if (createdParty == null) {
+				log.error("Created party is null");
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			}
+			URI uri = uriBuilder.path("/party/{id}").buildAndExpand(createdParty.getId()).toUri();
 			return ResponseEntity.created(uri).body(createdParty);
 		} catch (Exception e) {
+			log.error("Error creating party", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -129,6 +138,17 @@ public class PartyController {
 			}
 			updatedParty = partyDao.updateParty(party);
 			return ResponseEntity.ok(updatedParty);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PutMapping("/{partyId}/owner/{userId}")
+	public ResponseEntity<Party> assignPartyToUser(@PathVariable Integer partyId, @PathVariable Integer userId) {
+		Party party;
+		try {
+			party = partyDao.assignPartyToUser(partyId, userId);
+			return ResponseEntity.ok(party);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

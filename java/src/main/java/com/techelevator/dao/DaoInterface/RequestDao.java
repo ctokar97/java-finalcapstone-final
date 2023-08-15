@@ -1,6 +1,7 @@
 package com.techelevator.dao.DaoInterface;
 
 import com.techelevator.model.Request;
+import com.techelevator.model.Song;
 
 import java.util.List;
 
@@ -14,7 +15,11 @@ public interface RequestDao {
 	 */
 	public List<Request> getRequestsByPartyId(int partyId);
 
-	public List<Request> createRequest(Request request);
+	public Request getRequestBySongId(int songId);
+
+	public Song getSongByRequestId(int requestId);
+
+	public Request createRequest(Request request);
 
 	/**
 	 * Deletes a request with the given ID.

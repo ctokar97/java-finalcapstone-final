@@ -20,6 +20,11 @@ export default {
     getRequestsByPartyId(partyId) {
         return axios.get(`/request/${partyId}`);
     },
+
+
+    getSongsByRequestId(requestId) {
+        return axios.get(`/request/${requestId}/songs`);
+    },
     /**
      * Creates a new request using the given request data.
      *

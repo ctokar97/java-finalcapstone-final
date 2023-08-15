@@ -1,116 +1,288 @@
 <script>
+import axios from "axios";
+import SongService from "@/services/SongService";
+import RequestService from "@/services/RequestService";
+
 export default {
   name: "PartyDetail",
   props: ['id'],
+
+  data() {
+    return {
+      request: {
+        party_id: '',
+        song_id: ''
+      },
+      song: {
+        song_name: '',
+        artist: '',
+        genre: '',
+      }
+    }
+  },
 
   computed: {
     party() {
       return this.$store.getters.getPartyById(this.id);
     }
   },
-  created() {
-    this.$store.dispatch('fetchParty');
+  async created() {
+    await this.$store.dispatch('fetchParty');
+    await this.setSpotifyIDs();
+    await this.setSpotifyIDsForRequests();
+
   },
+  methods: {
+    async setSpotifyIDsForRequests() {
+      await Promise.all(
+          this.party.requests.map(async (request) => {
+            if (request.song) {
+              const query = `track:${request.song.song_name} artist:${request.song.artist}`;
+              const spotifySong = await this.searchTrack(query);
+              if (spotifySong && spotifySong.data.id) {
+                this.$set(request.song, 'spotify_id', spotifySong.data.id);
+                await SongService.updateSong(request.song.song_id, request.song);
+              }
+            }
+          })
+      );
+    },
+    async setSpotifyIDs() {
+      await Promise.all(
+          this.party.playlist.songs.map(async (song) => {
+            const query = `track:${song.song_name} artist:${song.artist}`;
+            const spotifySong = await this.searchTrack(query);
+            if (spotifySong && spotifySong.data.id) {
+              this.$set(song, 'spotify_id', spotifySong.data.id);
+              await SongService.updateSong(song.song_id, song);
+            }
+          })
+      );
+    },
+    async setSpotifyId(songToEdit) {
+      console.log("heres the song to edit", songToEdit);
+      const query = 'track:' + songToEdit.song_name + ' artist:' + songToEdit.artist;
+      console.log(query);
+      const spotifySong = await this.searchTrack(query);
+      console.log("heres the spotify song ", spotifySong);
+      if (spotifySong && spotifySong.data.id) {
+        this.$set(songToEdit, 'spotify_id', spotifySong.data.id);
+      }
+      return songToEdit;
+    },
+    async searchTrack(query) {
+      try {
+        const response = await axios.get('http://localhost:9000/api/search', {params: {q: query}});
+        console.log("Here is the response ", response);
+        return response;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    },
+    async submitForm() {
+      try {
+        let songData = await SongService.createSong(this.song);
+
+        let songWithId = await this.setSpotifyId(songData.data);
+        console.log("Here is the song data ", songWithId);
+
+        const updatedSong = await SongService.updateSong(songWithId.song_id, songData.data);
+
+        console.log("Here is the updated song ", updatedSong);
+
+        this.request.song_id = songData.data.song_id;
+        this.request.party_id = this.party.id;
+        await RequestService.createRequest(this.request);
+
+        await this.$store.dispatch('fetchParty');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 }
 </script>
 
 <template>
-  <div>
-    <div class="party-detail-view" v-if="party">
-      <div class="party-detail-container">
-        <div class="party-detail-name">
-          <h1>{{ party.party_name }}</h1>
-        </div>
-        <div class="detail-view">
-          <div class="details">
-            <div class="party-detail-users">
-              <p>People playing:</p>
-              <div class="scrolling-users">
-                <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
+  <!-- Language: HTML -->
+  <div v-if="party" class="party-detail-view">
+    <div class="party-detail-container">
+
+      <!-- Party Name should be in header for semantics -->
+      <header class="party-detail-name">
+        <h1>{{ party.party_name }}</h1>
+      </header>
+
+      <div class="party-detail-and-request">
+        <!-- Playlist and People -->
+        <section class="detail-view">
+          <div class="playlist-users-container">
+
+            <!-- Party Playlist -->
+            <h2 class="playlist">Playlist:</h2>
+            <div class="scrolling-playlist">
+              <div
+                  v-for="(song) in party.playlist.songs"
+                  :key="song.id"
+                  class="song">
+                <iframe
+                    class="song-data-display"
+                    :src="'https://open.spotify.com/embed/track/' + song.spotify_id"
+                    frameborder="0"
+                    allowtransparency="true"
+                    allow="encrypted-media">
+                </iframe>
               </div>
             </div>
-            <div class="party-detail-playlist">
-              <p>Playlist:</p>
-              <div class="scrolling-playlist">
-                <div class="song" v-for="song in party.playlist.songs" :key="song.id">
-                  <div class="song-data">
-                    <div class="song-name song-data-display">{{ song.song_name }}</div>
-                    <div class="song-artist song-data-display">{{ song.artist }}</div>
-                    <div class="song-genre song-data-display">{{ song.user_genre }}</div>
-                  </div>
-                  <div class="album-art"></div>
+
+
+            <!-- Users -->
+            <div class="user-information">
+              <h2 class="people-playing">People playing:</h2>
+              <div class="party-detail-users">
+                <div class="scrolling-users">
+                  <p
+                      v-for="user in party.users"
+                      :key="user.id"
+                      class="username">{{ user.username }}
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="request-view">
 
           </div>
-        </div>
+        </section>
+
+        <!-- Requests -->
+        <section class="request-view">
+          <div class="request-container">
+            <h2 class="playlist">Playlist:</h2>
+
+            <div class="scrolling-request">
+              <!-- Song Requests -->
+              <div
+                  v-for="(request) in party.requests"
+                  :key="request.id"
+                  class="song">
+                <iframe
+                    class="song-data-display"
+                    :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
+                    frameborder="0"
+                    allowtransparency="true"
+                    allow="encrypted-media">
+                </iframe>
+              </div>
+            </div>
+
+            <!-- Song Request Form -->
+            <div class="request-form">
+              <form @submit.prevent="submitForm">
+                <label for="song_name"> Song Name</label>
+                <input type="text" id="song_name" v-model="song.song_name" required>
+
+                <label for="artist"> Artist</label>
+                <input type="text" id="artist" v-model="song.artist" required>
+
+                <label for="user_genre"> Genre</label>
+                <input type="text" id="user_genre" v-model="song.genre" required>
+
+                <input type="submit" value="Submit">
+              </form>
+            </div>
+
+          </div>
+        </section>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
 
-.party-detail-name {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1em;
-}
-
 .party-detail-view {
   display: flex;
-  flex-direction: column;
 }
 
 .party-detail-container {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.party-detail-and-request {
+  display: flex;
   justify-content: space-around;
 }
-.detail-view {
+
+.party-detail-name {
   display: flex;
-  justify-content: space-around;;
+  justify-content: center;
 }
 
-.details {
+.detail-view {
+  display: flex;
+  width: 40%
+}
+
+.playlist-users-container {
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: 50em;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+.scrolling-playlist {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: space-around;
+}
 
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+.user-information {
+  display: flex;
+  flex-direction: column;
+}
 
-  backdrop-filter: blur(10px);
-
-  overflow: scroll;
+.scrolling-users {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: center;
 }
 
 .request-view {
   display: flex;
-  flex-direction: column;
-  width: 30%;
-  height: 50em;
-
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
-
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-
-  backdrop-filter: blur(10px);
-
-  overflow: scroll;
+  width: 40%
 }
 
+.request-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.scrolling-request {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: space-around;
+}
+
+.song {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20em;
+}
+
+.song-data-display {
+  margin-top: 10em;
+  height: 300px;
+  width: 300px;
+}
 
 </style>

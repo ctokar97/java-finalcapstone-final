@@ -23,14 +23,7 @@ export default {
         return axios.get(`/user/${username}`);
     },
 
-    /**
-     * Change the user role for a given user ID.
-     *
-     * @param {string} userId - The ID of the user to change the role for.
-     * @param {string} role - The new role to assign to the user.
-     * @returns {Promise} A Promise that resolves with the result of the request.
-     */
     changeUserRole(userId, role) {
-        return axios.put(`/user/${userId}`, role);
+        return axios.put(`/user/${userId}`, {role: role});
     }
 }

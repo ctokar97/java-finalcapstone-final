@@ -17,6 +17,8 @@ public class PartyMapper {
 		Party party = new Party();
 		party.setId(rowset.getInt("party_id"));
 		party.setParty_name(rowset.getString("party_name"));
+		party.setTheme(rowset.getString("theme"));
+		party.setParty_owner(rowset.getInt("party_owner"));
 		return party;
 	}
 }
