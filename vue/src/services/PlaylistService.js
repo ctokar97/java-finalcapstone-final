@@ -64,5 +64,9 @@ export default {
      */
     updatePlaylist(playlist) {
         return axios.put(`/playlist/${playlist.id}`, playlist);
+    },
+
+    addSongToPlaylist(playlistId, songId) {
+        return axios.post(`/playlist/${playlistId}/songs/${songId}`);
     }
 }

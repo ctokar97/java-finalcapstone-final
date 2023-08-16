@@ -68,7 +68,7 @@ public class JdbcRequestDao implements RequestDao {
 	@Override
 	public Song getSongByRequestId(int requestId) {
 		Song song = new Song();
-		String sql = "SELECT song.song_id, song.song_name, song.artist, song.genre, song.user_genre, song.spotify_id FROM song " +
+		String sql = "SELECT song.song_id, song.song_name, song.artist, song.genre, song.user_genre, song.spotify_id, song.votes FROM song " +
 				"JOIN request_list ON song.song_id = request_list.song_id " +
 				"WHERE request_list.id = ?";
 		try {

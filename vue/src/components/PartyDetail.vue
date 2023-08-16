@@ -2,6 +2,8 @@
 import axios from "axios";
 import SongService from "@/services/SongService";
 import RequestService from "@/services/RequestService";
+import PlaylistService from "@/services/PlaylistService";
+import {mapState} from "vuex";
 
 export default {
   name: "PartyDetail",
@@ -17,6 +19,9 @@ export default {
         song_name: '',
         artist: '',
         genre: '',
+      },
+      playlist: {
+        playlist_id: '',
       }
     }
   },
@@ -24,15 +29,27 @@ export default {
   computed: {
     party() {
       return this.$store.getters.getPartyById(this.id);
+    },
+    ...mapState({
+      userAuthorities: state => state.user.authorities
+    }),
+    hasRoleDJ() {
+      return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
     }
   },
   async created() {
     await this.$store.dispatch('fetchParty');
     await this.setSpotifyIDs();
     await this.setSpotifyIDsForRequests();
-
   },
   methods: {
+    addSongToPlaylist(songId, requestId) {
+      this.playlist.playlist_id = this.party.playlist.playlist_id;
+      PlaylistService.addSongToPlaylist(this.playlist.playlist_id, songId)
+      RequestService.deleteRequest(requestId);
+
+      this.$store.dispatch('fetchParty');
+    },
     async setSpotifyIDsForRequests() {
       await Promise.all(
           this.party.requests.map(async (request) => {
@@ -99,7 +116,7 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    }
+    },
   }
 }
 </script>
@@ -111,7 +128,7 @@ export default {
 
       <!-- Party Name should be in header for semantics -->
       <header class="party-detail-name">
-        <h1>{{ party.party_name }}</h1>
+        <h1>{{ party.party_name }} </h1>
       </header>
 
       <div class="party-detail-and-request">
@@ -157,23 +174,7 @@ export default {
         <!-- Requests -->
         <section class="request-view">
           <div class="request-container">
-            <h2 class="playlist">Playlist:</h2>
-
-            <div class="scrolling-request">
-              <!-- Song Requests -->
-              <div
-                  v-for="(request) in party.requests"
-                  :key="request.id"
-                  class="song">
-                <iframe
-                    class="song-data-display"
-                    :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
-                    frameborder="0"
-                    allowtransparency="true"
-                    allow="encrypted-media">
-                </iframe>
-              </div>
-            </div>
+            <h2 class="playlist">Request:</h2>
 
             <!-- Song Request Form -->
             <div class="request-form">
@@ -191,6 +192,23 @@ export default {
               </form>
             </div>
 
+            <div class="scrolling-request">
+              <!-- Song Requests -->
+              <div
+                  v-for="(request) in party.requests"
+                  :key="request.id"
+                  class="song">
+                <iframe
+                    class="song-data-display"
+                    :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
+                    frameborder="0"
+                    allowtransparency="true"
+                    allow="encrypted-media">
+                </iframe>
+                <button class="vote" v-if="hasRoleDJ" @click.prevent="addSongToPlaylist(request.song_id, request.id)">Move</button>
+              </div>
+            </div>
+
           </div>
         </section>
       </div>
@@ -201,6 +219,7 @@ export default {
 
 <style scoped>
 
+
 .party-detail-view {
   display: flex;
 }
@@ -208,6 +227,8 @@ export default {
 .party-detail-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+  height: 100vh;
   width: 100%;
 }
 
@@ -223,14 +244,23 @@ export default {
 
 .detail-view {
   display: flex;
-  width: 40%
+  height: 55em;
+  width: 45%;
+
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
 }
 
 .playlist-users-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   width: 100%;
 }
 
@@ -239,6 +269,7 @@ export default {
   flex-wrap: wrap;
   overflow-y: scroll;
   justify-content: space-around;
+  height: 75%;
 }
 
 .user-information {
@@ -255,14 +286,23 @@ export default {
 
 .request-view {
   display: flex;
-  width: 40%
+  height: 55em;
+  width: 45%;
+
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
 }
 
 .request-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-around;
 }
 
 .scrolling-request {
@@ -270,6 +310,7 @@ export default {
   flex-wrap: wrap;
   overflow-y: scroll;
   justify-content: space-around;
+  height: 75%;
 }
 
 .song {

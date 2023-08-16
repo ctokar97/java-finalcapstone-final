@@ -34,6 +34,7 @@ CREATE TABLE song (
                       genre varchar(50) NOT NULL,
                       user_genre varchar(50),
                       spotify_id varchar(50),
+                      votes int,
                       CONSTRAINT PK_song PRIMARY KEY (song_id)
 );
 

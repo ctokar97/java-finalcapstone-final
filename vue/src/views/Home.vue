@@ -34,7 +34,6 @@ export default {
 
   created() {
     this.$store.dispatch('fetchParty');
-    console.log(this.userAuthorities);
   },
   computed: {
     ...mapState({
