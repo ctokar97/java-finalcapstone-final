@@ -3,7 +3,7 @@
     <div class="content-wrapper">
       <h1>Harmony Mix</h1>
       <img class="welcome-image" src="@/images/HarmonyMix.jpg" alt="">
-      <h2>Welcome To Harmony Mix! Where all your party needs live!</h2>
+      <h2>Welcome To Harmony Mix! Where all your party playlist needs live!</h2>
       <button @click="goToLogin" type="button">Click here to get started!</button>
       </div>
     </div>
@@ -21,6 +21,8 @@ methods: {
 </script>
 
 <style scoped>
+
+@import url('https://fonts.cdnfonts.com/css/bukhari-script');
 
 .welcome {
   margin: auto;
@@ -42,6 +44,7 @@ h1 {
   font-size: 200px;
   display: flex;
   margin: 0;
+  font-family: 'Bukhari Script', sans-serif;
 
   
 }
@@ -51,7 +54,7 @@ h2{
   display: flex;
   margin: 0;
   font-size: 25px;  
-
+  font-family: 'Bukhari Script', sans-serif;
 }
 
 button{
@@ -63,6 +66,7 @@ button{
   font-size: 16px;
   background-color: purple;
   border-radius: 24px;
+  font-family: 'Bukhari Script', sans-serif;
 }
 
 img {
