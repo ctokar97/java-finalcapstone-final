@@ -23,7 +23,7 @@ export default new Vuex.Store({
   state: {
     token: currentToken || '',
     user: currentUser || {},
-    parties: []
+    parties: [],
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -73,6 +73,7 @@ export default new Vuex.Store({
         let response = await RequestService.getAllRequests();
         let requests = response.data;
         requests = requests.filter(request => request.party_id === party.id);
+        requests.reverse()
         party.requests = requests;
       }));
 
@@ -83,7 +84,9 @@ export default new Vuex.Store({
           request.song = song;
         }));
       }));
+      
 
+      parties.reverse();
       commit('SET_PARTIES', parties);
     }
   },
@@ -93,6 +96,6 @@ export default new Vuex.Store({
     },
     getPartyById: (state) => (id) => {
       return state.parties.find(party => party.id === Number(id));
-    }
+    },
   }
 })

@@ -22,6 +22,7 @@ public class SongMapper {
 		song.setGenre(rowset.getString("genre"));
 		song.setUser_genre(rowset.getString("user_genre"));
 		song.setSpotify_id(rowset.getString("spotify_id"));
+		song.setVotes(rowset.getInt("votes"));
 		return song;
 	}
 }

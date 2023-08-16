@@ -2,6 +2,19 @@
 export default {
   name: "PartyDisplay",
   props: ['party'],
+
+  data() {
+    return {
+      emojies: ['🎸', '🥁', '❤️', '🎆', '🎉', '🎊', '🎈', '🎵', '❄️', '⚡️', '🔥', '🥳', '🦾', '👀', '🚀', '🌄', '🌠', '🌌'],
+      selectedEmoji: ''
+    }
+  },
+
+  created() {
+  },
+
+  methods: {
+  }
 }
 </script>
 
@@ -11,6 +24,10 @@ export default {
       <router-link :to="{ name: 'party-details', params: { id: party.id } }">
         <h1>{{ party.party_name }}</h1>
       </router-link>
+      <div>{{ selectedEmoji }}</div>
+      <select v-model="selectedEmoji">
+        <option v-for="(emoji, index) in this.emojies" :key="index">{{ emoji }}</option>
+      </select>
     </div>
     <div class="user-container">
       <p>People playing:</p>
