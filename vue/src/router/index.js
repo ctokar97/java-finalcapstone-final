@@ -25,8 +25,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: 'welcome',
+      component: Welcome,
       meta: {
         requiresAuth: false
       }
@@ -64,11 +64,11 @@ const router = new Router({
         }
     },
     {
-      path: '/welcome',
-      name: 'welcome',
-      component: Welcome,
+      path: '/home',
+      name: 'home',
+      component: Home,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         }
     }
   ]
