@@ -49,4 +49,12 @@ CREATE TABLE playlist_song (
                                CONSTRAINT FK_song_playlist_song FOREIGN KEY (song_id) REFERENCES song(song_id)
 );
 
+CREATE TABLE request_list (
+                              id serial PRIMARY KEY,
+                              party_id int NOT NULL,
+                              song_id int,
+                              CONSTRAINT FK_party_request_list FOREIGN KEY (party_id) REFERENCES party(party_id),
+                              CONSTRAINT FK_song_request_list FOREIGN KEY (song_id) REFERENCES song(song_id)
+);
+
 COMMIT TRANSACTION;
