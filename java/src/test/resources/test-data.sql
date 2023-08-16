@@ -39,4 +39,11 @@ INSERT INTO playlist_song (playlist_id, song_id) VALUES
                                                      (4, 4),
                                                      (5, 5);
 
+INSERT INTO request_list (song_id, party_id) VALUES
+                                                (1, 1),
+                                                (2, 2),
+                                                (3, 3),
+                                                (4, 4),
+                                                (5, 5);
+
 COMMIT TRANSACTION;
