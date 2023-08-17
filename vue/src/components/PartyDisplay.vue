@@ -115,6 +115,8 @@ select {
   margin-bottom: 3em;
   padding: 0.2em;
   height: 2em;
+  font-family: 'Poppins', sans-serif;
+  color: white;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background-color: rgba(255, 255, 255, 0.2);
@@ -124,6 +126,10 @@ select {
 select:hover {
   background-color: rgba(255, 255, 255, 0.4);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.4);
+}
+
+option {
+  font-family: 'Poppins', sans-serif;
 }
 
 .name-container {
