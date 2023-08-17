@@ -10,18 +10,10 @@ describe('My Home Page', () => {
       cy.get('button').click()
     });
 
-    it('', () => {
-
-    });
 
   });
 
   beforeEach(function () {
-    cy.visit('/')
+    cy.visit('/home')
   });
 
-
-
-  
-
-                                                                                                                                                                                                
