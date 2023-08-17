@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+    <div id="nav" class="home-logout">
+      <div class="menu-items">
+        <router-link class="home-router" v-bind:to="{ name: 'home' }">Home</router-link>
+        <router-link class="logout-router" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      </div>
     </div>
     <router-view />
   </div>
@@ -11,6 +13,8 @@
 
 
 <style>
+@import url('https://fonts.cdnfonts.com/css/bukhari-script');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,900&display=swap');
 
 body {
   min-height: 100vh;
@@ -81,4 +85,47 @@ body::before {
   25% { top: 70%; left: 30%;}
   0% { top: 10%; left: 10%;}
 }
+
+.home-logout {
+  color: navy;
+  height: 2em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 20px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+  
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-items {
+  display: flex;
+  justify-content: space-between;
+  width: 10%;
+}
+
+.home-router {
+font-size: 0.9em;
+color: navy;
+padding-left: 20px;
+text-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logout-router {
+font-size: 0.9em;
+color: navy;
+padding-left: 30px;
+text-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
 </style>
