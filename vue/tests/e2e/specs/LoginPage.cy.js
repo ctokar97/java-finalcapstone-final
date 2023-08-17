@@ -5,11 +5,10 @@ describe('My Home Page', () => {
       expect(true).to.equal(true)
     })
 
-    it('Click button', () => {
-      cy.wait(1000);
-      cy.get('button').click()
+    it('Login', () => {
+        cy.get('#username').type('bob@burgers.com')
+        cy.get('#password').type('password123{enter}')
     });
-
 
   });
 
