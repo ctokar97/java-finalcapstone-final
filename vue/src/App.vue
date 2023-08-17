@@ -17,21 +17,24 @@ body {
   margin: 0;
   width: 100vw;
   overflow-x: hidden;
-  color: #fff;
-  background: linear-gradient(45deg, purple, pink, blue, green);
-  animation: gradientBG 15s ease infinite;
+  color: white;
+  background: linear-gradient(57deg, purple, pink, blue, green);
+  background-size: 1000% 1000%;
+  animation: ani 10s ease infinite;
 }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+@keyframes ani {
+  0%{background-position:0% 25%}
+  25%{background-position:25% 50%}
+  50%{background-position: 50% 75%}
+  75%{background-position: 75% 100%}
+  100%{background-position: 100% 75%}
+  75%{background-position: 75% 50%}
+  50%{background-position: 50% 25%}
+  25%{background-position: 25% 10%}
+  0%{background-position: 10% 0%}
+
+
 }
 
 body::before {
