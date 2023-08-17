@@ -70,7 +70,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
 
 h1 {
-  margin-top: 1em;
+  margin-top: 1.7em;
   font-family: 'Poppins', sans-serif;
   font-size: 5em;
   text-shadow: -7px 7px 5px rgba(0, 0, 0, 0.2);
@@ -80,7 +80,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5em;
+  margin-top: 2em;
 }
 
 button {
