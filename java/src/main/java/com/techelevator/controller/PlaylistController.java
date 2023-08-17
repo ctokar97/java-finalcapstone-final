@@ -1,12 +1,12 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.DaoInterface.PlaylistDao;
+import com.techelevator.dao.DaoInterface.SongDao;
 import com.techelevator.model.Playlist;
 import com.techelevator.model.Song;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ValidationException;
 import java.net.URI;
 import java.util.List;
 
@@ -16,9 +16,11 @@ import java.util.List;
 public class PlaylistController {
 
 	private final PlaylistDao playlistDao;
+	private final SongDao songDao;
 
-	public PlaylistController(PlaylistDao playlistDao) {
+	public PlaylistController(PlaylistDao playlistDao, SongDao songDao) {
 		this.playlistDao = playlistDao;
+		this.songDao = songDao;
 	}
 
 	@GetMapping
@@ -84,6 +86,17 @@ public class PlaylistController {
 			}
 			updatedPlaylist = playlistDao.updatePlaylist(playlist);
 			return ResponseEntity.ok(updatedPlaylist);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(null);
+		}
+	}
+
+	@PostMapping("/{playlistId}/songs/{songId}")
+	public ResponseEntity<Song> addSongToPlaylist(@PathVariable Integer playlistId, @PathVariable Integer songId) {
+		Song song;
+		try {
+			song = songDao.addSongToPlaylist(playlistId, songId);
+			return ResponseEntity.ok(song);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(null);
 		}

@@ -17,7 +17,7 @@
           <label for="password">Password</label>
           <input type="password" id="password" v-model="user.password" required/>
         </div>
-        <button type="submit">Sign in</button>
+        <button class="sign-in" type="submit">Sign in</button>
         <p>
           <NavigateToEventsButton class="navigate-to-parties"/>
           <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link>
@@ -74,7 +74,12 @@ export default {
 
 <style scoped>
 .form-input-group {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-in {
+  margin-top: 1em;
 }
 
 label {
@@ -95,7 +100,7 @@ label {
   height: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 
   background: rgba(255, 255, 255, 0.2);
@@ -122,6 +127,34 @@ h1 {
 .navigate-to-parties {
   display: flex;
   justify-content: center;
+  margin-bottom: 1em;
+}
+
+input {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  width: 10em;
+  height: 2em;
+  color: white;
+
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.4);
+  transform: scale(1.2);
 }
 
 </style>

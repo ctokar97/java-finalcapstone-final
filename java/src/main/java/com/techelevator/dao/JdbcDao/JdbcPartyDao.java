@@ -45,7 +45,7 @@ public class JdbcPartyDao implements PartyDao {
 	public List<Party> getAllParties() {
 		List<Party> parties = new ArrayList<>();
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name, party_owner, theme FROM party";
+		String sql = "SELECT party_id, party_name, party_owner, theme, emoji FROM party";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 			while (results.next()) {
@@ -61,7 +61,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyById(int partyId) {
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name, party_owner, theme FROM party WHERE party_id = ?";
+		String sql = "SELECT party_id, party_name, party_owner, theme, emoji FROM party WHERE party_id = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyId);
 			if (results.next()) {
@@ -82,7 +82,7 @@ public class JdbcPartyDao implements PartyDao {
 	@Override
 	public Party getPartyByName(String partyName) {
 		Party party = new Party();
-		String sql = "SELECT party_id, party_name, party_owner, theme FROM party WHERE party_name = ?";
+		String sql = "SELECT party_id, party_name, party_owner, theme, emoji FROM party WHERE party_name = ?";
 		try {
 			SqlRowSet results = jdbcTemplate.queryForRowSet(sql, partyName);
 			if (results.next()) {
@@ -175,9 +175,10 @@ public class JdbcPartyDao implements PartyDao {
 		Party newParty = new Party();
 		newParty.setParty_name(party.getParty_name());
 		newParty.setId(party.getId());
-		String sql = "UPDATE party SET party_name = ? WHERE party_id = ?";
+		newParty.setEmoji(party.getEmoji());
+		String sql = "UPDATE party SET party_name = ?, emoji = ? WHERE party_id = ?";
 		try {
-			jdbcTemplate.update(sql, newParty.getParty_name(), newParty.getId());
+			jdbcTemplate.update(sql, newParty.getParty_name(), newParty.getEmoji(), newParty.getId());
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}

@@ -19,6 +19,7 @@ public class PartyMapper {
 		party.setParty_name(rowset.getString("party_name"));
 		party.setTheme(rowset.getString("theme"));
 		party.setParty_owner(rowset.getInt("party_owner"));
+		party.setEmoji(rowset.getString("emoji"));
 		return party;
 	}
 }
