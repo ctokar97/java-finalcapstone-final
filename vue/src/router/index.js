@@ -5,7 +5,8 @@ import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
 import Register from '../views/Register.vue'
 import store from '../store/index'
-import PartyDetails from "@/views/PartyDetails.vue";
+import PartyDetails from "@/views/PartyDetails.vue"
+import Welcome from '../views/Welcome.vue';
 
 Vue.use(Router)
 
@@ -24,8 +25,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: 'welcome',
+      component: Welcome,
       meta: {
         requiresAuth: false
       }
@@ -58,6 +59,14 @@ const router = new Router({
       path: '/party/:id',
       name: 'party-details',
       component: PartyDetails,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
         meta: {
             requiresAuth: true
         }

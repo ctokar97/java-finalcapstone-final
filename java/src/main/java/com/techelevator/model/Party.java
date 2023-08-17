@@ -12,4 +12,5 @@ public class Party {
 	private String party_name;
 	private int party_owner;
 	private String theme;
+	private String emoji;
 }

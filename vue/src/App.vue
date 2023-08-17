@@ -8,11 +8,9 @@
   </div>
 </template>
 
+
+
 <style>
-html {
-  height: 100%;
-  margin: 0;
-}
 
 body {
   min-height: 100vh;
@@ -21,7 +19,6 @@ body {
   overflow-x: hidden;
   color: #fff;
   background: linear-gradient(45deg, purple, pink, blue, green);
-  background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
 }
 

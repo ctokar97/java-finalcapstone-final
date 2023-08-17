@@ -15,4 +15,6 @@ public interface SongDao {
 	Song createSong(Song song);
 
 	Song updateSong(Song song);
+
+	Song addSongToPlaylist(int playlistId, int songId);
 }
