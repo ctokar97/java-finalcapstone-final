@@ -1,4 +1,7 @@
 <script>
+import {mapState} from "vuex";
+import PartyService from "@/services/PartyService";
+
 export default {
   name: "PartyDisplay",
   props: ['party'],
@@ -6,7 +9,8 @@ export default {
   data() {
     return {
       emojies: ['🎸', '🥁', '❤️', '🎆', '🎉', '🎊', '🎈', '🎵', '❄️', '⚡️', '🔥', '🥳', '🦾', '👀', '🚀', '🌄', '🌠', '🌌'],
-      selectedEmoji: ''
+      selectedEmoji: '',
+      defaultDropDownMessage: 'Select an emoji'
     }
   },
 
@@ -14,6 +18,19 @@ export default {
   },
 
   methods: {
+    setEmoji(party, selectedEmoji) {
+      party.emoji = selectedEmoji;
+      PartyService.updateParty(party);
+    }
+  },
+
+  computed: {
+    ...mapState({
+      userAuthorities: state => state.user.authorities
+    }),
+    hasRoleDJ() {
+      return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
+    }
   }
 }
 </script>
@@ -21,43 +38,111 @@ export default {
 <template>
   <div class="display-container">
     <div class="name-container">
-      <router-link :to="{ name: 'party-details', params: { id: party.id } }">
+      <router-link class="router-link" style="text-decoration: none; color: white" :to="{ name: 'party-details', params: { id: party.id } }">
         <h1>{{ party.party_name }}</h1>
       </router-link>
-      <div>{{ selectedEmoji }}</div>
-      <select v-model="selectedEmoji">
-        <option v-for="(emoji, index) in this.emojies" :key="index">{{ emoji }}</option>
-      </select>
+      <div class="selected-emoji">{{ party.emoji ? party.emoji : selectedEmoji }}</div>
     </div>
-    <div class="user-container">
-      <p>People playing:</p>
-      <div class="scrolling-users">
-        <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
-      </div>
-      <div class="playlist-container">
-        <p>Playlist:</p>
-        <div class="scrolling-playlist">
-          <div class="song" v-for="song in party.playlist.songs" :key="song.id">
-            <div class="song-data">
-              <div class="song-name song-data-display">{{ song.song_name }}</div>
-              <div class="song-artist song-data-display">{{ song.artist }}</div>
-              <div class="song-genre song-data-display">{{ song.user_genre }} </div>
-            </div>
-            <div class="album-art"></div>
+    <select v-if="hasRoleDJ" v-model="selectedEmoji" @change="setEmoji(party, selectedEmoji)">
+      <option disabled value="">Please select an emoji</option>
+      <option v-for="(emoji, index) in this.emojies" :key="index">{{ emoji }}</option>
+    </select>
+    <div class="playlist-container">
+      <p class="playlist">Playlist:</p>
+      <div class="scrolling-playlist">
+        <div class="song" v-for="song in party.playlist.songs" :key="song.id">
+          <div class="song-data">
+            <div class="song-name song-data-display">{{ song.song_name }}</div>
+            <div class="song-artist song-data-display">{{ song.artist }}</div>
+            <div class="song-genre song-data-display">{{ song.user_genre }}</div>
+          </div>
+          <div class="album-art">
+            <img :src="song.album_art" alt="album art">
           </div>
         </div>
       </div>
+    </div>
+    <div class="user-container">
+      <p class="users-title">People playing:</p>
+      <div class="scrolling-users">
+        <p class="username" v-for="user in party.users" :key="user.id">{{ user.username }}</p>
+      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,900&display=swap');
+
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 2.5em;
+  text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.playlist {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2em;
+  text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.users-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2em;
+  text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.router-link {
+  transition: transform 0.3s ease-in-out;
+}
+
+.router-link:hover {
+  transform: scale(1.1);
+}
+
+router-link {
+  text-decoration: none;
+  color: white;
+}
+
+select {
+  margin-left: 1em;
+  margin-bottom: 3em;
+  padding: 0.2em;
+  height: 2em;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+}
+
+select:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.4);
+}
+
+.name-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.selected-emoji {
+  font-size: 3.5em;
+  margin-left: .5em;
+  margin-top: -0.3em;
+}
+
 .display-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
-  width: 100%;
   overflow: scroll;
 }
 
@@ -84,14 +169,20 @@ export default {
   display: flex;
   justify-content: center;
   margin: 0.5em;
-  width: 8em;
+  width: 10em;
   padding: 0.2em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
 
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
 
   border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.playlist-container {
+  width: 100%;
 }
 
 .scrolling-playlist {
@@ -113,12 +204,12 @@ export default {
 
 .song {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
-  margin: 0.5em;
   width: 100%;
-  height: 7em;
+  height: 20em;
   padding: 0.2em;
+  margin: 0.5em;
 
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
@@ -132,22 +223,34 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 25%;
+  height: 60%;
+  width: 35%;
   padding: 0.2em;
+  text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
 .song-data-display {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5em;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0.3em;
+  width: 20em;
 }
 
 .album-art {
-  height: 80%;
-  width: 70%;
-  background-color: rgba(255, 255, 255, 1);
+  height: 90%;
+  width: 40%;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
   border-radius: 0.5em;
+  overflow: hidden;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
 }
 </style>

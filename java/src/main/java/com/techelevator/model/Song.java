@@ -15,4 +15,5 @@ public class Song {
 	private String user_genre;
 	private String spotify_id;
 	private int votes;
+	private String album_art;
 }

@@ -15,6 +15,7 @@ CREATE TABLE party (
                        party_name varchar(50) NOT NULL UNIQUE,
                        party_owner int,
                        theme varchar(50),
+                       emoji varchar(50),
                        CONSTRAINT PK_party PRIMARY KEY (party_id),
                        CONSTRAINT FK_party_owner FOREIGN KEY (party_owner) REFERENCES users(user_id)
 );
@@ -35,6 +36,7 @@ CREATE TABLE song (
                       user_genre varchar(50),
                       spotify_id varchar(50),
                       votes int,
+                      album_art varchar(200),
                       CONSTRAINT PK_song PRIMARY KEY (song_id)
 );
 
