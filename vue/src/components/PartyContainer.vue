@@ -24,14 +24,15 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   width: 100%;
 }
 
 .party {
-  height: 25em;
-  width: 30%;
-  margin: 1%;
+  height: 75em;
+  width: 45%;
+  margin-bottom: .5%;
+  margin-top: 3.3%;
   padding: 1%;
   display: flex;
   flex-direction: column;
