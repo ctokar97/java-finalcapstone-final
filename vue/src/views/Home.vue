@@ -88,6 +88,7 @@ button {
   height: 2em;
   color: white;
   margin: 2em;
+  font-family: 'Poppins', sans-serif;
 
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);

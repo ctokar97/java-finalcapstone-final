@@ -22,6 +22,16 @@ export default {
       },
       playlist: {
         playlist_id: '',
+      },
+    }
+  },
+
+  watch: {
+    'song.genre'() {
+      if (this.song.genre.toLowerCase().includes('country')) {
+        this.song.song_name = '';
+        this.song.artist = '';
+        this.song.genre = '';
       }
     }
   },
@@ -244,6 +254,7 @@ h1 {
   font-weight: 700;
   font-size: 2em;
   text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 1em;
   margin-bottom: 1em;
 }
 
