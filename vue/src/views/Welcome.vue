@@ -2,9 +2,11 @@
   <div  class="welcome">
     <div class="content-wrapper">
       <h1>Harmony Mix</h1>
-      <img class="welcome-image" src="@/images/HarmonyMix.jpg" alt="">
       <h2>Welcome To Harmony Mix! Where all your party playlist needs live!</h2>
+      
+      
       <button @click="goToLogin" type="button">Click here to get started!</button>
+      <img class="welcome-image" src="@/images/HarmonyMix.jpg" alt="">
       </div>
     </div>
 </template>
@@ -53,7 +55,7 @@ h2{
     color:purple;
   display: flex;
   margin: 0;
-  font-size: 25px;  
+  font-size: 30px;  
   font-family: 'Bukhari Script', sans-serif;
 }
 
