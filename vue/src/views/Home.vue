@@ -41,6 +41,9 @@ export default {
       userAuthorities: state => state.user.authorities
     }),
     hasRoleDJ() {
+      if (!this.userAuthorities) {
+        return false;
+      }
       return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
     }
   },
