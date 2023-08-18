@@ -3,10 +3,12 @@
     <div class="home">
       <h1>Check out these parties!</h1>
       <div class="button-wrapper">
-        <button class="party-creator-button" v-if="hasRoleDJ" @click="showPartyCreator = !showPartyCreator">create a party</button>
-        <button class="login-to-spotify" @click="getSpotifyUserLogin">Log into Spotify!</button>
+        <button class="party-creator-button" v-if="hasRoleDJ" @click="showPartyCreator = !showPartyCreator">Create A Party</button>
+        <button class="login-to-spotify" @click="getSpotifyUserLogin">Log Into Spotify!</button>
       </div>
-      <PartyCreator v-if="showPartyCreator" @close="showPartyCreator = false"></PartyCreator>
+      <transition name="modal">
+        <PartyCreator class="party-creator" v-if="showPartyCreator" @close="showPartyCreator = false"></PartyCreator>
+      </transition>
       <PartyContainer/>
     </div>
   </transition>
@@ -66,8 +68,12 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,900&display=swap');
 
+.party-creator {
+  z-index: 1;
+}
+
 h1 {
-  margin-top: 1em;
+  margin-top: 1.7em;
   font-family: 'Poppins', sans-serif;
   font-size: 5em;
   text-shadow: -7px 7px 5px rgba(0, 0, 0, 0.2);
@@ -77,7 +83,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5em;
+  margin-top: 2em;
 }
 
 button {
@@ -104,7 +110,6 @@ button:hover {
 }
 
 
-
 .home {
   display: flex;
   flex-direction: column;
@@ -123,6 +128,13 @@ h1 {
 
 .fade-enter, .fade-leave-to {
   opacity: 15%;
+}
+
+.modal-enter-active, .modal-leave-active {
+  transition: opacity .2s;
+}
+.modal-enter, .modal-leave-to {
+  opacity: 0;
 }
 
 </style>

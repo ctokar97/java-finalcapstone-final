@@ -10,5 +10,6 @@ public class Playlist {
 
 	private int playlist_id;
 	private int party_id;
+	private int partyId;
 	private String playlist_name;
 }

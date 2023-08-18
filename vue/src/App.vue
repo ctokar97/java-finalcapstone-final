@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav" class="home-logout">
       <div class="menu-items">
-        <router-link class="home-router" v-bind:to="{ name: 'home' }">Home</router-link>
-        <router-link class="logout-router" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+        <router-link class="home-router router" v-bind:to="{ name: 'home' }">Home</router-link>
+        <router-link class="logout-router router" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
     </div>
     <router-view />
@@ -90,7 +90,9 @@ body::before {
 }
 
 .home-logout {
-  color: navy;
+  position: fixed;
+  z-index: 1;
+  width: 100vw;
   height: 2em;
   display: flex;
   justify-content: flex-start;
@@ -103,11 +105,9 @@ body::before {
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
 
-  border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.2);
 
   backdrop-filter: blur(10px);
-  transition: transform 0.3s ease-in-out;
 }
 
 .menu-items {
@@ -118,17 +118,26 @@ body::before {
 
 .home-router {
 font-size: 0.9em;
-color: navy;
+color: white;
 padding-left: 20px;
 text-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .logout-router {
 font-size: 0.9em;
-color: navy;
+color: white;
 padding-left: 30px;
 text-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.router {
+  transition: transform 0.3s ease-in-out;
+}
+
+.router:hover {
+  transform: scale(1.2);
+  text-decoration: none;
+  color: inherit;
+}
 
 </style>

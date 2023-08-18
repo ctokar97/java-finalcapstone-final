@@ -63,5 +63,9 @@ export default {
 
     assignPartyToUser(partyId, userId) {
         return axios.put(`/party/${partyId}/owner/${userId}`);
+    },
+
+    addUserToParty(partyId, userId) {
+        return axios.post(`/party/${partyId}/user/${userId}`);
     }
 }

@@ -153,9 +153,10 @@ $$
         current_playlist_id INTEGER;
         current_song_id INTEGER;
         current_request_song_id INTEGER;
-        artist_names TEXT[] := ARRAY['Taylor Swift', 'Ed Sheeran', 'The Weeknd', 'Bruno Mars', 'Justin Bieber', 'Ariana Grande', 'Beyonce', 'Rihanna', 'Lady Gaga', 'Maroon 5'];
-        song_names TEXT[] := ARRAY['Love Story', 'Shape of You', 'Blinding Lights', 'Just The Way You Are', 'Sorry', 'Thank You, Next', 'Halo', 'Diamonds', 'Poker Face', 'Sugar'];
-        party_names TEXT[] := ARRAY['ThunderNight', 'ElectroFest', 'JazzyEvening', 'IndieGathering', 'MetalMania', 'PopParty', 'RetroRevival', 'ReggaeRumble', 'ClassicCarnival', 'RockRave', 'BluesBash', 'FiestaLatina', 'CountryCraze', 'SoulSession', 'HipHopHoopla'];
+        artist_names TEXT[] := ARRAY['Taylor Swift', 'Ed Sheeran', 'The Weeknd', 'Bruno Mars', 'Colony Collapse', 'Ariana Grande', 'Beyonce', 'Rihanna', 'Lady Gaga', 'Maroon 5'];
+        song_names TEXT[] := ARRAY['Love Story', 'Shape of You', 'Blinding Lights', 'Just The Way You Are', 'Take Forever', 'Thank You, Next', 'Halo', 'Diamonds', 'Poker Face', 'Sugar'];
+        party_names TEXT[] := ARRAY['Thunder Night', 'Electro Fest', 'Jazzy Evening', 'Indie Gathering', 'Metal Mania', 'Pop Party', 'Retro Revival', 'Reggae Rumble', 'Classic Carnival', 'Rock Rave',
+            'Blues Bash', 'Fiery Times', 'Not Crazy About Country', 'Soul Session', 'Hip-Hop Hoopla'];
         user_names TEXT[] := ARRAY['SwiftFan123', 'EdHead', 'WeekndWarrior', 'Martian', 'Belieber', 'AriArmy', 'BeyHive', 'RiriNavy', 'Monster', 'Marooner', 'DiamondHeart', 'PokerAce', 'SugarCoated', 'LoveStruck', 'StarShaped'];
     BEGIN
         FOR i IN 1..15 LOOP

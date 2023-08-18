@@ -97,23 +97,15 @@ public class JdbcPlaylistDao implements PlaylistDao {
 		return songs;
 	}
 
-	/**
-	 * Creates a new playlist in the database.
-	 *
-	 * @param playlist the playlist object to be created
-	 * @return the created playlist object
-	 * @throws DaoException if unable to connect to the database server or database
-	 */
 	@Override
-	public Playlist createPlaylist(Playlist playlist) {
+	public Playlist createPlaylist(Playlist playlist, int partyId) {
 		Playlist newPlaylist = new Playlist();
 		newPlaylist.setPlaylist_name(playlist.getPlaylist_name());
-		newPlaylist.setParty_id(playlist.getParty_id());
 
 		String sql = "INSERT INTO playlist (playlist_name, party_id) VALUES (?, ?)";
 
 		try {
-			jdbcTemplate.update(sql, newPlaylist.getPlaylist_name(), newPlaylist.getParty_id());
+			jdbcTemplate.update(sql, newPlaylist.getPlaylist_name(), partyId);
 		} catch (CannotGetJdbcConnectionException e) {
 			throw new DaoException("Unable to connect to server or database", e);
 		}
