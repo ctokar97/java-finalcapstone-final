@@ -1,6 +1,7 @@
 <script>
 import UserService from "@/services/UserService";
 import PartyService from "@/services/PartyService";
+import PlaylistService from "@/services/PlaylistService";
 
 export default {
   name: "PartyCreator",
@@ -9,7 +10,10 @@ export default {
       party: {
         party_name: "",
         party_owner: "",
-        theme: ""
+        theme: "",
+        playlist: {
+          playlist_name: "",
+        }
       }
     };
   },
@@ -26,6 +30,13 @@ export default {
       try {
         const response = await PartyService.createParty(this.party);
         console.log("Response: ", response);
+
+        const playlistResponse = await PlaylistService.createPlaylist(
+            {
+              ...this.party.playlist,
+              partyId: response.data.id
+            });
+        console.log("Playlist Response: ", playlistResponse)
 
         const userResponse = await PartyService.assignPartyToUser(response.data.id, user.data.id)
         console.log("User Response: ", userResponse);
@@ -56,6 +67,8 @@ export default {
         <input type="text" id="party_owner" v-model="party.party_owner" required>
         <label for="theme"> Party Theme </label>
         <input type="text" id="theme" v-model="party.theme" required>
+        <label for="playlist"> Playlist Name</label>
+        <input type="text" id="playlist" v-model="party.playlist.playlist_name" required>
         <button type="submit">Create Party</button>
         <button class="close-form" @click="closeForm">Close Party Creator</button>
       </form>
