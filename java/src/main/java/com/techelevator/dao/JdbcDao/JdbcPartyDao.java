@@ -72,6 +72,20 @@ public class JdbcPartyDao implements PartyDao {
 		}
 		return party;
 	}
+	@Override
+	public Party addUserToParty(int partyId, int userId) {
+		String sql = "INSERT INTO user_party (user_id, party_id) VALUES (?, ?)";
+		int updatedRows = 0;
+		try {
+			updatedRows = jdbcTemplate.update(sql, userId, partyId);
+			if ( updatedRows == 0 ) {
+				throw new DaoException("Update failed: No such party id found");
+			}
+		} catch (CannotGetJdbcConnectionException e) {
+			throw new DaoException("Unable to connect to server or database", e);
+		}
+		return getPartyById(partyId);
+	}
 	/**
 	 * Retrieves a Party object from the database based on the given party name.
 	 *

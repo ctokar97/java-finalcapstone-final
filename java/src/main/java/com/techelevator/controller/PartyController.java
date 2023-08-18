@@ -153,4 +153,14 @@ public class PartyController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-}
+
+	@PostMapping("/{partyId}/user/{userId}")
+		public ResponseEntity<Party> addUserToParty(@PathVariable Integer partyId, @PathVariable Integer userId) {
+		Party party;
+		try {
+			party = partyDao.addUserToParty(partyId, userId);
+			return ResponseEntity.ok(party);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}}

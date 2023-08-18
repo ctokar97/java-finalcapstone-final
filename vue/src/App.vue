@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav" class="home-logout">
       <div class="menu-items">
-        <router-link class="home-router" v-bind:to="{ name: 'home' }">Home</router-link>
-        <router-link class="logout-router" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+        <router-link class="home-router router" v-bind:to="{ name: 'home' }">Home</router-link>
+        <router-link class="logout-router router" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </div>
     </div>
     <router-view />
@@ -130,5 +130,14 @@ padding-left: 30px;
 text-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.router {
+  transition: transform 0.3s ease-in-out;
+}
+
+.router:hover {
+  transform: scale(1.2);
+  text-decoration: none;
+  color: inherit;
+}
 
 </style>

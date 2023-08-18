@@ -4,6 +4,7 @@ import SongService from "@/services/SongService";
 import RequestService from "@/services/RequestService";
 import PlaylistService from "@/services/PlaylistService";
 import {mapState} from "vuex";
+import PartyService from "@/services/PartyService";
 
 export default {
   name: "PartyDetail",
@@ -47,12 +48,28 @@ export default {
       return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
     }
   },
-  async created() {
-    await this.$store.dispatch('fetchParty');
-    await this.setSpotifyIDs();
-    await this.setSpotifyIDsForRequests();
+  created() {
+    this.$store.dispatch('fetchParty').then(() => {
+      this.party.playlist.songs.forEach(song => {
+        if (!song.spotify_id) {
+          this.setSpotifyId(song);
+        }
+      })
+
+      this.party.requests.forEach(request => {
+        if (!request.song.spotify_id) {
+          this.setSpotifyId(request.song);
+        }
+      })
+    });
   },
   methods: {
+
+    async addUserToParty() {
+      await PartyService.addUserToParty(this.party.id, this.$store.state.user.id);
+      await this.$store.dispatch('fetchParty');
+    },
+
     addSongToPlaylist(songId, requestId) {
       this.playlist.playlist_id = this.party.playlist.playlist_id;
       PlaylistService.addSongToPlaylist(this.playlist.playlist_id, songId)
@@ -99,6 +116,7 @@ export default {
         this.$set(songToEdit, 'spotify_id', spotifySong.data.id);
         this.$set(songToEdit, 'album_art', spotifySong.data.album.images[0].url);
       }
+      await SongService.updateSong(songToEdit.song_id, songToEdit);
       return songToEdit;
     },
     async searchTrack(query) {
@@ -130,6 +148,10 @@ export default {
       } catch (error) {
         console.error(error);
       }
+
+      this.song.song_name = '';
+      this.song.artist = '';
+      this.song.genre = '';
     },
   }
 }
@@ -142,7 +164,7 @@ export default {
 
       <!-- Party Name should be in header for semantics -->
       <header class="party-detail-name">
-        <h1>{{ party.party_name }} </h1>
+        <h1>{{ party.emoji ? party.party_name + " " + party.emoji : party.party_name }} </h1>
       </header>
 
       <div class="party-detail-and-request">
@@ -171,7 +193,10 @@ export default {
 
             <!-- Users -->
             <div class="user-information">
-              <h2 class="people-playing">Active Users:</h2>
+              <div class="user-info-header">
+                <h2 class="people-playing">Active Users: </h2>
+                <button class="join-party" @click="addUserToParty" v-if="hasRoleDJ === false">Join Party?</button>
+              </div>
               <div class="party-detail-users">
                 <div class="scrolling-users">
                   <p
@@ -247,6 +272,7 @@ h1 {
   font-weight: 900;
   font-size: 2.5em;
   text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 1.7em;
 }
 
 .playlist {
@@ -476,6 +502,10 @@ label {
   text-shadow: -2px 3px 4px rgba(0, 0, 0, 0.2);
 }
 
+input {
+  color: white;
+}
+
 .input {
   margin-bottom: 1em;
   padding: 0.2em;
@@ -506,6 +536,13 @@ label {
   background: rgba(255, 255, 255, 0.4);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
+}
+
+.user-info-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
 }
 
 </style>
