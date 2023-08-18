@@ -13,7 +13,7 @@ public interface PlaylistDao {
 
 	List<Song> getSongsInPlaylist(int playlistId);
 
-	Playlist createPlaylist(Playlist playlist);
+	Playlist createPlaylist(Playlist playlist, int partyId);
 
 	Playlist updatePlaylist(Playlist playlist);
 }

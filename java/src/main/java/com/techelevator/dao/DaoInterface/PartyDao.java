@@ -23,4 +23,6 @@ public interface PartyDao {
 	Party assignPartyToUser(int partyId, int userId);
 
 	Party getPartyById(int partyId);
+
+	Party addUserToParty(int partyId, int userId);
 }

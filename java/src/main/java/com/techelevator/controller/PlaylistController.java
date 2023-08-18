@@ -68,10 +68,10 @@ public class PlaylistController {
 
 	@PostMapping
 	public ResponseEntity<Playlist> createPlaylist(@RequestBody Playlist playlist) {
-		Playlist createdPlaylist;
+		Playlist newPlaylist;
 		try {
-			createdPlaylist = playlistDao.createPlaylist(playlist);
-			return ResponseEntity.created(new URI("/playlist/" + createdPlaylist.getPlaylist_id())).body(createdPlaylist);
+			newPlaylist = playlistDao.createPlaylist(playlist, playlist.getPartyId());
+			return ResponseEntity.created(URI.create("/playlist/" + newPlaylist.getPlaylist_id())).body(newPlaylist);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(null);
 		}

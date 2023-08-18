@@ -19,8 +19,7 @@
         </div>
         <button class="sign-in" type="submit">Sign in</button>
         <p>
-          <NavigateToEventsButton class="navigate-to-parties"/>
-          <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link>
+          <router-link class="need-an-account" :to="{ name: 'register' }">Need an account? Sign up.</router-link>
         </p>
       </form>
     </div>
@@ -29,12 +28,11 @@
 
 <script>
 import authService from "../services/AuthService";
-import NavigateToEventsButton from "@/components/NavigateToEventsButton.vue";
 
 export default {
   name: "login",
   components: {
-    NavigateToEventsButton
+
   },
   data() {
     return {
@@ -73,6 +71,9 @@ export default {
 </script>
 
 <style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,900&display=swap');
+
 .form-input-group {
   display: flex;
   flex-direction: column;
@@ -84,6 +85,7 @@ export default {
 
 label {
   margin-right: 0.5rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 #login {
@@ -114,6 +116,7 @@ label {
 
 h1 {
   justify-content: flex-start;
+  font-family: 'Poppins', sans-serif;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -124,16 +127,12 @@ h1 {
   opacity: 15%;
 }
 
-.navigate-to-parties {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1em;
-}
-
 input {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+  color: white;
+  font-family: 'Poppins', sans-serif;
 }
 
 button {
@@ -149,12 +148,28 @@ button {
 
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease-in-out;
+  font-family: 'Poppins', sans-serif;
 }
 
 button:hover {
   background: rgba(255, 255, 255, 0.4);
   box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.4);
   transform: scale(1.2);
+}
+
+.need-an-account {
+  display: inline-block;
+  font-size: 0.8em;
+  color: white;
+  text-decoration: none;
+  margin-top: .5em;
+  transition: transform 0.2s ease-in-out;
+  font-family: 'Poppins', sans-serif;
+}
+
+.need-an-account:hover {
+  color: white;
+  transform: scale(1.1);
 }
 
 </style>
