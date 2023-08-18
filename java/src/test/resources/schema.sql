@@ -13,7 +13,11 @@ CREATE TABLE users (
 CREATE TABLE party (
                        party_id SERIAL,
                        party_name varchar(50) NOT NULL UNIQUE,
-                       CONSTRAINT PK_party PRIMARY KEY (party_id)
+                       party_owner int,
+                       theme varchar(50),
+                       emoji varchar(50),
+                       CONSTRAINT PK_party PRIMARY KEY (party_id),
+                       CONSTRAINT FK_party_owner FOREIGN KEY (party_owner) REFERENCES users(user_id)
 );
 
 CREATE TABLE playlist (
@@ -30,6 +34,9 @@ CREATE TABLE song (
                       artist varchar(100) NOT NULL,
                       genre varchar(50) NOT NULL,
                       user_genre varchar(50),
+                      spotify_id varchar(50),
+                      votes int,
+                      album_art varchar(200),
                       CONSTRAINT PK_song PRIMARY KEY (song_id)
 );
 

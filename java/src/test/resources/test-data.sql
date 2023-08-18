@@ -4,12 +4,12 @@ INSERT INTO users (username,password_hash,role) VALUES ('user1','user1','ROLE_US
 INSERT INTO users (username,password_hash,role) VALUES ('user2','user2','ROLE_USER');
 INSERT INTO users (username,password_hash,role) VALUES ('user3','user3','ROLE_USER');
 
-INSERT INTO party (party_name) VALUES
-                                   ('party1'),
-                                   ('party2'),
-                                   ('party3'),
-                                   ('party4'),
-                                   ('party5');
+INSERT INTO party (party_name, theme, emoji) VALUES
+                                   ('party1', 'theme1', 'emoji1'),
+                                   ('party2', 'theme2', 'emoji2'),
+                                   ('party3', 'theme3', 'emoji3'),
+                                   ('party4', 'theme4', 'emoji4'),
+                                   ('party5', 'theme5', 'emoji5');
 
 INSERT INTO song (song_name, artist, genre, user_genre) VALUES
                                                             ('song1', 'artist1', 'genre1', 'user_genre1'),

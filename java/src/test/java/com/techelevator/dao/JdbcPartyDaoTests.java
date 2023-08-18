@@ -17,11 +17,11 @@
 //import java.util.List;
 //public class JdbcPartyDaoTests extends BaseDaoTests {
 //
-//    public static final Party PARTY_1 = new Party(1,"party1");
-//    public static final Party PARTY_2 = new Party(2,"party2");
-//    public static final Party PARTY_3 = new Party(3,"party3");
-//    public static final Party PARTY_4 = new Party(4,"party4");
-//    public static final Party PARTY_5 = new Party(5,"party5");
+//    public static final Party PARTY_1 = new Party(1,"party1", 1, "theme1", "emoji1");
+//    public static final Party PARTY_2 = new Party(2,"party2", 2, "theme2", "emoji2");
+//    public static final Party PARTY_3 = new Party(3,"party3", 3, "theme3", "emoji3");
+//    public static final Party PARTY_4 = new Party(4,"party4", 4, "theme4", "emoji4");
+//    public static final Party PARTY_5 = new Party(5,"party5", 5, "theme5", "emoji5");
 //
 //    private JdbcPartyDao sut;
 //
@@ -65,7 +65,7 @@
 //
 //    @Test
 //    public void createParty_returns_party_with_id_and_expected_values() {
-//        Party newParty = new Party(6, "party6");
+//        Party newParty = new Party(6, "party6",6, "theme6", "emoji6");
 //
 //        Party createdParty = sut.createParty(newParty);
 //
