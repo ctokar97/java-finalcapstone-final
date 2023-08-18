@@ -1,13 +1,12 @@
 const { Button } = require("bootstrap");
 
-describe('My Home Page', () => {
-    it('Does not do much!', () => {
-      expect(true).to.equal(true)
-    })
+describe('My Login Page', () => {
+    
 
     it('Login', () => {
-        cy.get('#username').type('bob@burgers.com')
-        cy.get('#password').type('password123{enter}')
+        cy.get('#username').type('ruslan')
+        cy.get('#password').type('ruslan{enter}')
+        expect(true).to.equal(true)
     });
 
   });

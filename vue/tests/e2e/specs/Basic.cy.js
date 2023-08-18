@@ -1,17 +1,14 @@
 const { Button } = require("bootstrap");
 
 describe('My Home Page', () => {
-    it('Does not do much!', () => {
-      expect(true).to.equal(true)
-    })
-
-    it('Click button', () => {
-      cy.wait(1000);
+  it('Click button', () => {
       cy.get('button').click()
+      expect(true).to.equal(true)
     });
 
-    it('', () => {
-
+    it('home hRef works', () => {
+      cy.get('.home-router').click()
+      expect(true).to.equal(true)
     });
 
   });
