@@ -41,12 +41,21 @@ export default {
     party() {
       return this.$store.getters.getPartyById(this.id);
     },
+    numberOfRequests() {
+      return this.party.requests.length;
+    },
     ...mapState({
       userAuthorities: state => state.user.authorities
     }),
     hasRoleDJ() {
       return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
-    }
+    },
+  },
+  ...mapState({
+    userAuthorities: state => state.user.authorities
+  }),
+  hasRoleDJ() {
+    return this.userAuthorities.some(auth => auth.name === 'ROLE_DJ');
   },
   created() {
     this.$store.dispatch('fetchParty').then(() => {
@@ -212,7 +221,7 @@ export default {
         </section>
 
         <!-- Requests -->
-        <section class="request-view">
+        <section class="request-view" v-if="numberOfRequests >= 3">
           <div class="request-container">
             <h2 class="playlist">Request:</h2>
 
@@ -229,6 +238,53 @@ export default {
                 <input class="input" type="text" id="user_genre" v-model="song.genre" required>
 
                 <input class="submit-button" type="submit" value="Submit">
+              </form>
+            </div>
+
+            <div class="scrolling-request">
+              <!-- Song Requests -->
+              <div
+                  v-for="(request) in party.requests"
+                  :key="request.id"
+                  class="song">
+                <div class="iframe-container">
+                  <iframe
+
+                      :src="'https://open.spotify.com/embed/track/' + request.song.spotify_id"
+                      width="300"
+                      height="380"
+                      frameborder="0"
+                      allowtransparency="true"
+                      allow="encrypted-media">
+                  </iframe>
+                </div>
+                <div class="button-container">
+                  <button class="move" v-if="hasRoleDJ" @click.prevent="addSongToPlaylist(request.song_id, request.id)">Move</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Default Requests -->
+        <section class="request-view default-request-view" v-else>
+          <div class="request-container default-request-container">
+            <h2 class="playlist default-playlist">Request:</h2>
+
+            <!-- Song Request Form -->
+            <div class="request-form default-request-form">
+              <form class="default-form" @submit.prevent="submitForm">
+                <label class="default-label" for="song_name"> Song Name</label>
+                <input class="input default-input" type="text" id="song_name" v-model="song.song_name" required>
+
+                <label class="default-label" for="artist"> Artist</label>
+                <input class="input default-input" type="text" id="artist" v-model="song.artist" required>
+
+                <label class="default-label" for="user_genre"> Genre</label>
+                <input class="input default-input" type="text" id="user_genre" v-model="song.genre" required>
+
+                <input class="submit-button default-submit" type="submit" value="Submit">
               </form>
             </div>
 
@@ -545,4 +601,40 @@ input {
   width: 100%;
 }
 
+.default-request-view {
+  display: flex;
+  flex-direction: column;
+  height: 55em;
+  width: 45%;
+
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 2px 15px 4px rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
+}
+
+.default-request-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  overflow-y: scroll;
+}
+
+.default-playlist {
+  margin-bottom: 2em;
+}
+
+.default-request-form {
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50em;
+  width: 100%;
+}
 </style>
